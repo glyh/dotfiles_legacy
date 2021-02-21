@@ -1,5 +1,4 @@
-
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.config/nvim/plugged')
 
 " UI
 Plug 'itchyny/lightline.vim' " statusline
@@ -35,6 +34,9 @@ Plug 'deoplete-plugins/deoplete-clang'
 " Lang#nim
 Plug 'zah/nim.vim' " Bundle
 
+" Lang#markdown
+Plug 'gabrielelana/vim-markdown' " Syntax and edit
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 
 call plug#end()
 
@@ -55,7 +57,7 @@ set completeopt-=preview
 
 " lengthmatters.vim
 let g:lengthmatters_excluded = ['unite', 'tagbar', 'startify', 'gundo',
-      \ 'vimshell', 'w3m', 'nerdtree', 'help', 'qf', 'dirvish', '.\+\.md',
+      \ 'vimshell', 'w3m', 'nerdtree', 'help', 'qf', 'dirvish', 'markdown',
       \ 'conjure-log-[0-9]\+\.cljc']
 
 " deoplete.nvim
@@ -69,22 +71,10 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " ale
 let g:ale_lint_on_text_changed = 1
-" let g:ale_linters = {
-"      \ 'clojure': ['clj-kondo'],
-"      \ 'c' : ['clang-tidy'],
-"      \ 'cpp' : ['clang-tidy']
-"      \}
 let g:ale_fixers = {
       \   '*': ['remove_trailing_lines', 'trim_whitespace'],
       \}
 let g:ale_fix_on_save = 1
-
-let g:LanguageClient_serverCommands = {
-      \ 'clojure': ['clojure-lsp'],
-      \ 'c' : ['clangd'],
-      \ 'cpp' : ['clangd'],
-      \ 'nim' : ['nim-lsp']
-      \ }
 
 " deoplete-clang
 let g:deoplete#sources#clang#libclang_path = '/usr/lib/libclang.so'
@@ -98,6 +88,9 @@ require'lspconfig'.clojure_lsp.setup{}
 require'lspconfig'.nimls.setup{}
 
 EOF
+
+" markdown preview
+let g:mkdp_browser = 'brave'
 
 " Others
 " Tabbing
