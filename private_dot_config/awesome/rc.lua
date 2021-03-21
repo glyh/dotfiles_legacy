@@ -169,7 +169,7 @@ end
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
-my_tags = { "wal", "www", "dev", "sys", "ent"}
+my_tags = {"www", "work", "dev", "sys", "ent"}
 
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
@@ -676,3 +676,5 @@ spawn_once("aria2c -D") -- Start aria2c daemon
 spawn_once("unclutter -root &") -- Hide cursor when unnecessary
 spawn_once("qv2ray &") -- Start proxy
 spawn_once("nm-applet &") -- Start network manager tray
+spawn_once("cbatticon") -- Set battery icon
+spawn_once("brightnessctl s 100") -- Set brightness
