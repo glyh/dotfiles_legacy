@@ -49,7 +49,7 @@ theme = "rainbow"
 beautiful.init(string.format("%s/themes/%s/theme.lua", gears.filesystem.get_configuration_dir(), theme))
 awful.util.spawn_with_shell(string.format("betterlockscreen -u ~/.config/awesome/themes/%s/wall.png -r 2560x1600",theme))
 -- awful.util.spawn_with_shell(string.format("wal -n -i ~/.config/awesome/themes/%s/wall.png",theme))
- 
+
 
 -- This is used later as the default terminal and editor to run.
 terminal = "alacritty"
@@ -238,10 +238,10 @@ function alter_sound(delta, limited)
    arg = ""
    if limited then
      arg = arg .. " --max-volume 100"
-   end 
+   end
    if delta == 0 then
      arg = arg .. " --toggle-mute"
-   else 
+   else
      arg = arg .. " --change-volume " .. delta
    end
    awful.spawn("pulsemixer" .. arg)
@@ -302,7 +302,7 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
 
-    awful.key({ modkey,           }, "l",     function()  awful.client.focus.bydirection("right") end, --    
+    awful.key({ modkey,           }, "l",     function()  awful.client.focus.bydirection("right") end, --
               {description = "focus the client on the right", group = "client"}),
     awful.key({ modkey,           }, "h",     function () awful.client.focus.bydirection("left") end, -- function ()  awful.tag.incmwfact(-0.05)          end,
               {description = "focus the client on the left", group = "client"}),
@@ -354,10 +354,9 @@ globalkeys = gears.table.join(
               --{description = "show the menubar", group = "launcher"}),
 
     -- Fn keys
-    awful.key({ }, "XF86ScreenSaver",
-        function() 
-          awful.spawn("alacritty")
-          awful.spawn.with_shell("betterlockscreen -l")
+    awful.key({ modkey }, "/",
+        function()
+          awful.spawn("betterlockscreen -l")
         end,{description = "Lock screen", group = "System"}),
     awful.key({                   }, "XF86AudioRaiseVolume", function() alter_sound(10, true) end,
               {description = "Volume up", group = "System"}),
@@ -592,7 +591,7 @@ client.connect_signal("request::titlebars", function(c)
             awful.titlebar.widget.closebutton    (c),
             layout = wibox.layout.fixed.horizontal()
         },
-        layout = wibox.layout.align.horizontal, 
+        layout = wibox.layout.align.horizontal,
     }
 end)
 
@@ -605,7 +604,7 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
--- auto titlebar 
+-- auto titlebar
 --[[
 awful.tag.attached_connect_signal(nil, "property::layout", function(t)
     local clients = t:clients()
@@ -654,7 +653,7 @@ client.connect_signal("property::geometry", function(c)
     end
 end)
 
-client.connect_signal("unmanage", function(c) floatgeoms[c.window] = nil end)    
+client.connect_signal("unmanage", function(c) floatgeoms[c.window] = nil end)
 
 client.connect_signal("manage", function(c)
     if ((awful.layout.get(mouse.screen) == awful.layout.suit.floating) or (awful.client.floating.get(c) == true)) then
@@ -674,6 +673,7 @@ spawn_once("fcitx &") -- Install IME
 spawn_once("udiskie -a &") -- Check for new hardware
 spawn_once("aria2c -D") -- Start aria2c daemon
 spawn_once("unclutter -root &") -- Hide cursor when unnecessary
+spawn_once("redshift &") -- Hide cursor when unnecessary
 spawn_once("qv2ray &") -- Start proxy
 spawn_once("nm-applet &") -- Start network manager tray
 spawn_once("cbatticon") -- Set battery icon
