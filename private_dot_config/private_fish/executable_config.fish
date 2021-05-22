@@ -6,7 +6,7 @@ for i in (luarocks path | awk '{sub(/PATH=/, "PATH ", $2); print "set -gx "$2}')
 set XDG_USER_CONFIG_DIR ~/.config
 
 alias ed="nvim"
-alias pro="proxychains"
+alias p="proxychains"
 alias pa="paru"
 alias ppa="proxychains paru"
 alias ch="chezmoi"
