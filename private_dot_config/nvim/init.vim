@@ -32,6 +32,9 @@ Plug 'neovim/nvim-lspconfig'
 " Lang#Clojure
 Plug 'Olical/conjure' " REPL integration
 
+" Lang#Idris
+Plug 'edwinb/idris2-vim' " Bundle
+
 " Lang#C/Cpp
 Plug 'bfrg/vim-cpp-modern' " Highlight
 Plug 'deoplete-plugins/deoplete-clang'
@@ -44,7 +47,7 @@ Plug 'zah/nim.vim' " Bundle
 Plug 'ziglang/zig.vim' " Bundle
 
 " Lang#markdown
-Plug 'gabrielelana/vim-markdown' " Syntax and edit
+" Plug 'gabrielelana/vim-markdown' " Syntax and edit
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 
 call plug#end()
@@ -101,10 +104,14 @@ let g:deoplete#sources#clang#clang_header = '/usr/include/'
 " LSP
 lua << EOF
 
-require'lspconfig'.clangd.setup{}
-require'lspconfig'.clojure_lsp.setup{}
-require'lspconfig'.nimls.setup{}
-require'lspconfig'.zls.setup{}
+local lspconfig = require('lspconfig')
+local configs = require('lspconfig/configs')
+
+lspconfig.clangd.setup{}
+lspconfig.clojure_lsp.setup{}
+lspconfig.nimls.setup{}
+lspconfig.zls.setup{}
+lspconfig.hls.setup{}
 
 EOF
 
