@@ -12,6 +12,7 @@ alias pa="paru"
 alias ppa="proxychains paru"
 alias ch="chezmoi"
 alias lr="lein repl"
+alias rm="rm -i"
 
 function expand-dot-to-parent-directory-path -d 'expand ... to ../.. etc'
     # Get commandline up to cursor

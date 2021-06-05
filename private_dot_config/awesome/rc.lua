@@ -295,6 +295,10 @@ globalkeys = gears.table.join(
         {description = "go back", group = "client"}),
 
     -- Standard program
+    awful.key({ modkey }, "/",
+        function()
+          awful.spawn("betterlockscreen -l")
+        end,{description = "Lock screen", group = "System"}),
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
@@ -354,10 +358,6 @@ globalkeys = gears.table.join(
               --{description = "show the menubar", group = "launcher"}),
 
     -- Fn keys
-    awful.key({ modkey }, "/",
-        function()
-          awful.spawn("betterlockscreen -l")
-        end,{description = "Lock screen", group = "System"}),
     awful.key({                   }, "XF86AudioRaiseVolume", function() alter_sound(10, true) end,
               {description = "Volume up", group = "System"}),
     awful.key({                   }, "XF86AudioLowerVolume", function() alter_sound(-10, true) end,
@@ -674,7 +674,7 @@ spawn_once("udiskie -a &") -- Check for new hardware
 spawn_once("aria2c -D") -- Start aria2c daemon
 spawn_once("unclutter -root &") -- Hide cursor when unnecessary
 spawn_once("redshift &") -- Hide cursor when unnecessary
-spawn_once("qv2ray &") -- Start proxy
 spawn_once("nm-applet &") -- Start network manager tray
 spawn_once("cbatticon") -- Set battery icon
 spawn_once("brightnessctl s 100") -- Set brightness
+spawn_once("qv2ray &") -- Start proxy
