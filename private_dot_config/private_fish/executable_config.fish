@@ -1,12 +1,13 @@
-set -a PATH ~/.local/bin
-set -a PATH ~/.nimble/bin
-set -a PATH ~/.luarocks
+#set -a PATH ~/.local/bin
+#set -a PATH ~/.nimble/bin
+#set -a PATH ~/.luarocks
+set -a PATH ~/.yarn/bin
 # for i in (luarocks path | awk '{sub(/PATH=/, "PATH ", $2); print "set -gx "$2}'); eval $i; end
 
 set XDG_USER_CONFIG_DIR ~/.config
 
 alias ed="nvim"
-alias li="light -S 40"
+alias li="brightnessctl s 100"
 alias p="proxychains"
 alias pa="paru"
 alias ppa="proxychains paru"
