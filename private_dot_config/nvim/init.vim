@@ -32,8 +32,14 @@ Plug 'neovim/nvim-lspconfig'
 " Lang#Clojure
 Plug 'Olical/conjure' " REPL integration
 
+" Lang#Carp
+"Plug 'hellerve/carp-vim'
+
+" Lang#Fennel
+Plug 'bakpakin/fennel.vim'
+
 " Lang#Idris
-Plug 'edwinb/idris2-vim' " Bundle
+" Plug 'edwinb/idris2-vim' " Bundle
 
 " Lang#C/Cpp
 Plug 'bfrg/vim-cpp-modern' " Highlight
@@ -48,7 +54,8 @@ Plug 'ziglang/zig.vim' " Bundle
 
 " Lang#markdown
 " Plug 'gabrielelana/vim-markdown' " Syntax and edit
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
+" Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
+" Plug 'oknozor/illumination', { 'dir': '~/.illumination', 'do': '.install.sh' }
 
 call plug#end()
 

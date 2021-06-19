@@ -1,7 +1,0 @@
-[user]
-	email = lyhokia@gmail.com
-	name = lyhokia
-[diff]
-	tool = vimdiff
-[pull]
-	rebase = false
