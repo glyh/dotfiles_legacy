@@ -87,6 +87,10 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>fd <cmd>Telescope lsp_definitions<cr>
 nnoremap <leader>fr <cmd>Telescope lsp_references<cr>
 
+" conjure
+
+let g:conjure#log#hud#width = 1
+let g:conjure#log#hud#anchor = "SE"
 
 " deoplete.nvim
 let g:deoplete#enable_at_startup = 1
@@ -118,7 +122,7 @@ lspconfig.clangd.setup{}
 lspconfig.clojure_lsp.setup{}
 lspconfig.nimls.setup{}
 lspconfig.zls.setup{}
-lspconfig.hls.setup{}
+-- lspconfig.hls.setup{}
 
 EOF
 

@@ -283,5 +283,6 @@ exec aria2c -D
 exec redshift &
 exec brightnessctl s 100
 exec qv2ray &
-exec fusuma &
+#exec fusuma &
 exec waybar &
+exec bb --nrepl-server 5678 & # Start babashka nrepl server in background
