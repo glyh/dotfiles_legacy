@@ -1,9 +1,14 @@
-set -a PATH                ~/.local/bin
-set -a PATH                ~/.nimble/bin
-set -a PATH                ~/.yarn/bin
-set -a PATH                ~/.cargo/bin
-set    XDG_CONFIG_HOME     ~/.config
-set    XDG_USER_CONFIG_DIR ~/.config
+set -a  PATH                ~/.local/bin
+set -a  PATH                ~/.nimble/bin
+set -a  PATH                ~/.yarn/bin
+set -a  PATH                ~/.cargo/bin
+set -a  PATH                /usr/lib/jvm/default/bin
+set     XDG_CONFIG_HOME     ~/.config
+set     XDG_USER_CONFIG_DIR ~/.config
+set     JAVA_HOME           /usr/lib/jvm/default
+set -gx CLASSPATH           /usr/share/java/antlr-complete.jar
+set     BOOT_JVM_OPTIONS    "--add-modules java.xml.bind"
+set -gx CARP_DIR ~/.carp
 
 alias ed="nvim"
 alias li="brightnessctl s 100"

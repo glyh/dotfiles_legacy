@@ -5,3 +5,5 @@
 	tool = vimdiff
 [pull]
 	rebase = false
+[http]
+	proxy = 
