@@ -2,7 +2,8 @@
   {autoload {a aniseed.core
              nvim aniseed.nvim
              packer packer
-             mapper nvim-mapper}})
+             mapper nvim-mapper
+             teleb  telescope.builtin}})
 
 ;; Plugins
 (defn- safe-require-plugin-config [name]
@@ -52,13 +53,14 @@
           (if (and (not= nil category) (not= nil id))
             (pcall
               mapper.map mode from action options category id description)))
-        (do
-          (let [to (.. "keymap_fn_" mid)
-                vim-cmd (.. "v:lua." to "()")]
-            (nvim.set_keymap mode from vim-cmd options)
-            (tset _G to action)
-            (if (and (not= nil category) (not= nil id))
-              (mapper.map mode from vim-cmd options category id description)))
+        (let [to (.. "keymap_fn_" mid)
+              vim-cmd (if options.expr
+                        (.. "v:lua." to "()")
+                        (.. "<Cmd>lua " to "()<CR>"))]
+          (nvim.set_keymap mode from vim-cmd options)
+          (tset _G to action)
+          (if (and (not= nil category) (not= nil id))
+            (mapper.map mode from vim-cmd options category id description))
           (set mid (+ mid 1)))))))
 
 (defn keymaps [configs]

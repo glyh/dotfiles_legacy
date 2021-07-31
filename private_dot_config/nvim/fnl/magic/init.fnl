@@ -2,7 +2,8 @@
   {autoload       {nvim   aniseed.nvim
                    u      magic.utils
                    lsp    lspconfig
-                   mapper nvim-mapper}
+                   mapper nvim-mapper
+                   teleb  telescope.builtin}
    require-macros [magic.macros]})
 
 
@@ -26,6 +27,7 @@
 (set nvim.o.mouse "a")
 (set nvim.o.updatetime 500)
 (set nvim.o.timeoutlen 500)
+;;(set nvim.o.sessionoptions ["blank" "curdir" "folds" "help" "tabpages" "winsize"])
 (set nvim.o.sessionoptions "blank,curdir,folds,help,tabpages,winsize")
 (set nvim.o.inccommand :split)
 (set nvim.o.completeopt "menu")
@@ -161,11 +163,14 @@
 
    :n
    {"<leader>ff"
-    ["<cmd>Telescope find_files<CR>"
+    [teleb.find_files ;;"<cmd>Telescope find_files<CR>"
      {:noremap true}
      "Files" "telescope_find_files" "Find files via Telescope"]
+    }})
+(comment "<leader>fp"
+      ["<cmd>Telescope mapper<CR>"
+       {:noremap true}
+       "Mappings" "mapper_show_mappings" "Show mappings via Mapper"])
 
-    "<leader>fp"
-    ["<cmd>Telescope mapper<CR>"
-     {:noremap true}
-     "Mappings" "mapper_show_mappings" "Show mappings via Mapper"]}})
+;; (tset _G "shit" teleb.find_files)
+;; (nvim.set_keymap :n "<leader>ff" "v:lua.shit()" {:noremap true})
