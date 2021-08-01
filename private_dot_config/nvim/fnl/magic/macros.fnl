@@ -39,4 +39,7 @@
       (vim.cmd (.. "augroup " ,(tostring name) "\nautocmd!"))
       ,...
       (vim.cmd "augroup END")
-      nil))}
+      nil))
+ :swap!
+ (fn [x f]
+   `(set ,x (,f ,x)))}

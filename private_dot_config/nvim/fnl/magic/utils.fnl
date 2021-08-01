@@ -65,3 +65,9 @@
 
 (defn f->action [f]
   (mt.transform_mod {:x f}))
+
+(defn join [strs sep]
+  (a.reduce
+    (fn [acc cur]
+      (if (= acc "") cur (.. acc sep cur)))
+    "" strs))

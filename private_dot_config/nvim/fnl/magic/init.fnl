@@ -1,7 +1,9 @@
 (module magic.init
-  {autoload       {nvim   aniseed.nvim
+  {autoload       {a      aniseed.core
+                   nvim   aniseed.nvim
                    utils  magic.utils
-                   lsp    lspconfig}
+                   lsp    lspconfig
+                   meta      magic.meta}
    require-macros [magic.macros]})
 
 
@@ -29,6 +31,7 @@
 (set nvim.o.inccommand :split)
 (set nvim.o.completeopt "menu")
 (nvim.ex.set :list :number)
+
 
 ;; Packer configuration format: https://github.com/wbthomason/packer.nvim
 (utils.use
@@ -89,6 +92,10 @@
 (set nvim.g.ale_lint_on_text_changed true)
 (set nvim.g.ale_fixers {:* [:remove_trailing_lines :trim_whitespace] })
 (set nvim.g.ale_fix_on_save true)
+(set nvim.g.ale_pattern_options {
+   "conjure-log-[0-9]\\+\\.cljc"
+     {:ale_linters {}
+      :ale_fixers {}}})
 
 
 ;; Interactive Development
@@ -107,9 +114,10 @@
     (tset auto-pairs "'" nil)
     (tset auto-pairs "`" nil)
     (set nvim.b.AutoPairs auto-pairs))))
-(augroup auto-pairs-config
+
+(augroup auto-pair-config
   (nvim.ex.autocmd
-    :FileType "clojure,fennel,scheme,racket"
+    :FileType meta.lisp-file-types
     "call v:lua.auto_pair_lisp()"))
 
 (set nvim.g.deoplete#enable_at_startup true)
@@ -117,7 +125,6 @@
   {:clojure "[\\w!$%&*+/:<=>?@\\^_~\\-\\.#]*"})
 (set nvim.g.deoplete#sources#clang#libclang_path "/usr/lib/libclang.so")
 (set nvim.g.deoplete#sources#clang#clang_header "/usr/include")
-
 
 ;; UI
 
@@ -145,6 +152,11 @@
 (let [servers [:clangd :clojure_lsp]]
   (each [_ s (ipairs servers)]
     ((-> lsp (. s) (. "setup")) {})))
+;; (tset vim.lsp.handlers
+;;       :textDocument/publishDiagnostics
+;;       (vim.lsp.with
+;;         vim.lsp.diagnostic.on_publish_diagnostics
+;;         {:virtual_text false}))
 
 
 ;; Treesitter
@@ -154,7 +166,8 @@
 
 ;; Editing utils
 
-(set nvim.g.sexp_filetypes "clojure,scheme,lisp,timl,fennel")
+(set nvim.g.sexp_filetypes meta.lisp-file-types)
+
 
 ;; Mappings
 
