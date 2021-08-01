@@ -180,16 +180,17 @@ mode "nag" {
 #
 # Layout stuff:
 #
+    # Dynamic tiles
     # You can "split" the current object of your focus with
     # $mod+b or $mod+v, for horizontal and vertical splits
     # respectively.
-    bindsym $mod+b splith
-    bindsym $mod+v splitv
+    # bindsym $mod+b splith
+    # bindsym $mod+v splitv
 
     # Switch the current container between different layout styles
-    bindsym $mod+s layout stacking
-    bindsym $mod+w layout tabbed
-    bindsym $mod+e layout toggle split
+    # bindsym $mod+s layout stacking
+    # bindsym $mod+w layout tabbed
+    # bindsym $mod+e layout toggle split
 
     # Make the current focus fullscreen
     bindsym $mod+f fullscreen
@@ -275,6 +276,7 @@ for_window [app_id="Google-chrome"] border none
 
 include /etc/sway/config.d/*
 
+exec autotiling
 exec aria2c -D
 #exec dbus-launch --exit-with-session fcitx5
 #exec_always fcitx5 -d --replace

@@ -70,12 +70,13 @@
   :nvim-telescope/telescope-frecency.nvim
     {:requires [:nvim-telescope/telescope.nvim :tami5/sql.nvim]}
   ;;:glepnir/lspsaga.nvim {}
+  :nvim-treesitter/nvim-treesitter {:run ":TSUpdate"}
 
   ;; Langs
   ;;:hellerve/carp-vim {}
   :bakpakin/fennel.vim {}
   ;;:bfrg/vim-cpp-modern {}
-  ;;:deoplete-plugins/deoplete-clang {:requires [:Shougo/deoplete.nvim]}
+  :tweekmonster/deoplete-clang2 {:requires [:Shougo/deoplete.nvim]}
   ;;:wlangstroth/vim-racket {}
   ;;:hylang/vim-hy {}
   )
@@ -145,6 +146,15 @@
   (each [_ s (ipairs servers)]
     ((-> lsp (. s) (. "setup")) {})))
 
+
+;; Treesitter
+
+(require :magic.treesitter)
+
+
+;; Editing utils
+
+(set nvim.g.sexp_filetypes "clojure,scheme,lisp,timl,fennel")
 
 ;; Mappings
 

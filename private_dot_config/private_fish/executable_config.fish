@@ -9,7 +9,10 @@ set     JAVA_HOME           /usr/lib/jvm/default
 set -gx CLASSPATH           /usr/share/java/antlr-complete.jar
 set     BOOT_JVM_OPTIONS    "--add-modules java.xml.bind"
 set -gx CARP_DIR ~/.carp
+set     VISUAL              nvim
 
+alias vim="nvim"
+alias vi="nvim"
 alias ed="nvim"
 alias edc="nvim ~/.config/nvim/fnl/magic/*"
 alias li="brightnessctl s 100"
