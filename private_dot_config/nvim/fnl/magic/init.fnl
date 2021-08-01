@@ -55,6 +55,7 @@
   :tpope/vim-sexp-mappings-for-regular-people {:requires [:guns/vim-sexp]}
   :tpope/vim-commentary {}
   :tpope/vim-sleuth {}
+  :tpope/vim-repeat {}
 
   ;; Tools
   :Olical/conjure {}
@@ -68,14 +69,16 @@
   :neovim/nvim-lspconfig {}
   :nvim-telescope/telescope-frecency.nvim
     {:requires [:nvim-telescope/telescope.nvim :tami5/sql.nvim]}
+  ;;:glepnir/lspsaga.nvim {}
 
   ;; Langs
-  :hellerve/carp-vim {}
+  ;;:hellerve/carp-vim {}
   :bakpakin/fennel.vim {}
-  :bfrg/vim-cpp-modern {}
-  :deoplete-plugins/deoplete-clang {:requires [:Shougo/deoplete.nvim]}
-  :wlangstroth/vim-racket {}
-  :hylang/vim-hy {})
+  ;;:bfrg/vim-cpp-modern {}
+  ;;:deoplete-plugins/deoplete-clang {:requires [:Shougo/deoplete.nvim]}
+  ;;:wlangstroth/vim-racket {}
+  ;;:hylang/vim-hy {}
+  )
 
 
 ;;; Specific Configurations
@@ -106,7 +109,7 @@
 (augroup auto-pairs-config
   (nvim.ex.autocmd
     :FileType "clojure,fennel,scheme,racket"
-    (.. "call v:lua.auto_pair_lisp()")))
+    "call v:lua.auto_pair_lisp()"))
 
 (set nvim.g.deoplete#enable_at_startup true)
 (nvim.fn.deoplete#custom#option :keyword_patterns

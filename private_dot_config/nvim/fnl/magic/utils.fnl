@@ -39,36 +39,29 @@
        :config config})))
 
 ;; Mappings
-(defn termcode [str]
+(defn- termcode [str]
   (vim.api.nvim_replace_termcodes str true true true))
 
-(def- keymap
-  (do
-    (var mid 1)
-    (fn [mode from action options category id description]
-      "Sets a key mapping and store its document in nvim-mapper."
-      (if (a.string? action)
-        (do
-          (nvim.set_keymap mode from action options)
-          (if (and (not= nil category) (not= nil id))
-            (pcall
-              mapper.map mode from action options category id description)))
-        (let [to (.. "keymap_fn_" mid)
-              vim-cmd (if options.expr
-                        (.. "v:lua." to "()")
-                        (.. "<Cmd>lua _G[\"" to "\"]()<CR>"))]
-          (nvim.set_keymap mode from vim-cmd options)
-          (tset _G to action)
-          (if (and (not= nil category) (not= nil id))
-            (mapper.map mode from vim-cmd options category id description))
-          (set mid (+ mid 1)))))))
+(defn keymap [mode from action options id category description]
+  "Sets a key mapping and store its document in nvim-mapper."
+  (if (a.string? action)
+    (do
+      (nvim.set_keymap mode from action options)
+      (if (not= nil category)
+        (mapper.map mode from action options category id description)))
+    (let [to (.. "keymap_fn_" id)
+          vim-cmd (if options.expr
+                    (.. "v:lua." to "()")
+                    (.."<Cmd>lua " to "()<CR>"))]
+      (nvim.set_keymap mode from vim-cmd options)
+      (if options.expr
+        (tset _G to (fn [] (termcode (action))))
+        (tset _G to action))
+      (if (not= nil category)
+        (mapper.map mode from vim-cmd options category id description)))))
 
-(defn keymaps [configs]
-  "Set key mappings"
-  (each [mode mode-map (pairs configs)]
-    (each [from [action options category id description] (pairs mode-map)]
-      (keymap mode from action options category id description))))
+(defn keymap-doc [mode from id category description]
+  (mapper.map_virtual mode from "" {} category id description))
 
 (defn f->action [f]
   (mt.transform_mod {:x f}))
-;;(f->action (fn [a] (+ a 1)))

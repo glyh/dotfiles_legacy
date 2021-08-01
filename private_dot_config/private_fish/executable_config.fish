@@ -11,7 +11,7 @@ set     BOOT_JVM_OPTIONS    "--add-modules java.xml.bind"
 set -gx CARP_DIR ~/.carp
 
 alias ed="nvim"
-alias edc="nvim ~/.config/nvim/fnl/magic/* -p"
+alias edc="nvim ~/.config/nvim/fnl/magic/*"
 alias li="brightnessctl s 100"
 alias p="proxychains"
 alias pa="paru"

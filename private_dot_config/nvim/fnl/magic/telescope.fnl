@@ -9,14 +9,10 @@
    require-macros [magic.macros]})
 
 
-;; Freceny
-
 (tele.load_extension "frecency")
-
-
-;; Mapper
-
 (tele.load_extension "mapper")
+(tele.setup {:pickers {:buffers {:theme :dropdown :previewer false}} })
+
 (mapper.setup {:no_map true})
 ;builtin.quickfix
 ;(tele.extensions.mapper.mapper {})
