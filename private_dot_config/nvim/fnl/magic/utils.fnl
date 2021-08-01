@@ -1,9 +1,9 @@
 (module magic.utils
-  {autoload {a aniseed.core
-             nvim aniseed.nvim
+  {autoload {a      aniseed.core
+             nvim   aniseed.nvim
              packer packer
              mapper nvim-mapper
-             teleb  telescope.builtin}})
+             mt     telescope.actions.mt}})
 
 ;; Plugins
 (defn- safe-require-plugin-config [name]
@@ -56,7 +56,7 @@
         (let [to (.. "keymap_fn_" mid)
               vim-cmd (if options.expr
                         (.. "v:lua." to "()")
-                        (.. "<Cmd>lua " to "()<CR>"))]
+                        (.. "<Cmd>lua _G[\"" to "\"]()<CR>"))]
           (nvim.set_keymap mode from vim-cmd options)
           (tset _G to action)
           (if (and (not= nil category) (not= nil id))
@@ -68,3 +68,7 @@
   (each [mode mode-map (pairs configs)]
     (each [from [action options category id description] (pairs mode-map)]
       (keymap mode from action options category id description))))
+
+(defn f->action [f]
+  (mt.transform_mod {:x f}))
+;;(f->action (fn [a] (+ a 1)))

@@ -1,9 +1,7 @@
 (module magic.init
   {autoload       {nvim   aniseed.nvim
-                   u      magic.utils
-                   lsp    lspconfig
-                   mapper nvim-mapper
-                   teleb  telescope.builtin}
+                   utils  magic.utils
+                   lsp    lspconfig}
    require-macros [magic.macros]})
 
 
@@ -27,22 +25,20 @@
 (set nvim.o.mouse "a")
 (set nvim.o.updatetime 500)
 (set nvim.o.timeoutlen 500)
-;;(set nvim.o.sessionoptions ["blank" "curdir" "folds" "help" "tabpages" "winsize"])
 (set nvim.o.sessionoptions "blank,curdir,folds,help,tabpages,winsize")
 (set nvim.o.inccommand :split)
 (set nvim.o.completeopt "menu")
 (nvim.ex.set :list :number)
 
 ;; Packer configuration format: https://github.com/wbthomason/packer.nvim
-(u.use
+(utils.use
   ;; Config for packer startup function
   {:git
    {:default_url_format "https://hub.fastgit.org/%s"}}
 
   ;; MagicKit
-  :Olical/aniseed {}
-  :Olical/conjure {}
   :wbthomason/packer.nvim {}
+  :Olical/aniseed {}
 
   ;; UI
   :itchyny/lightline.vim {}
@@ -61,6 +57,7 @@
   :tpope/vim-sleuth {}
 
   ;; Tools
+  :Olical/conjure {}
   :airblade/vim-gitgutter {}
   :nvim-telescope/telescope.nvim
     {:requires [:nvim-lua/popup.nvim :nvim-lua/plenary.nvim]}
@@ -69,13 +66,16 @@
   :deoplete-plugins/deoplete-lsp {:requires [:Shougo/deoplete.nvim]}
   :dense-analysis/ale {}
   :neovim/nvim-lspconfig {}
+  :nvim-telescope/telescope-frecency.nvim
+    {:requires [:nvim-telescope/telescope.nvim :tami5/sql.nvim]}
 
   ;; Langs
   :hellerve/carp-vim {}
   :bakpakin/fennel.vim {}
   :bfrg/vim-cpp-modern {}
   :deoplete-plugins/deoplete-clang {:requires [:Shougo/deoplete.nvim]}
-  :wlangstroth/vim-racket {})
+  :wlangstroth/vim-racket {}
+  :hylang/vim-hy {})
 
 
 ;;; Specific Configurations
@@ -92,20 +92,21 @@
 (set nvim.g.conjure#log#hud#width 1)
 (set nvim.g.conjure#log#hud#anchor :SE)
 (set nvim.g.conjure#log#hud#border :none)
+; Enable enable aniseed as fennel environment
 (set nvim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed.")
 
 
 ;; Auto Complete
 
-(defn auto_pair_setup []
+(global auto_pair_lisp (fn []
   (let [auto-pairs nvim.g.AutoPairs]
     (tset auto-pairs "'" nil)
     (tset auto-pairs "`" nil)
-    (set nvim.b.AutoPairs auto-pairs)))
+    (set nvim.b.AutoPairs auto-pairs))))
 (augroup auto-pairs-config
   (nvim.ex.autocmd
-    :FileType "clojure,fennel,scheme"
-    (.. "call v:lua.require('" *module-name* "').auto_pair_setup()")))
+    :FileType "clojure,fennel,scheme,racket"
+    (.. "call v:lua.auto_pair_lisp()")))
 
 (set nvim.g.deoplete#enable_at_startup true)
 (nvim.fn.deoplete#custom#option :keyword_patterns
@@ -130,47 +131,18 @@
       "tex" "conjure-log-[0-9]\\+\\.cljc"])
 
 
+;; Telescope
+
+(require :magic.telescope)
+
+
 ;; LSP
 
 (let [servers [:clangd :clojure_lsp]]
   (each [_ s (ipairs servers)]
-    ((. (. lsp s) "setup") {})))
+    ((-> lsp (. s) (. "setup")) {})))
 
 
-;; Mapper & Mappings
+;; Mappings
 
-(mapper.setup {:no_map true})
-
-(set nvim.g.mapleader " ")
-(set nvim.g.maplocalleader "\\")
-(u.keymaps
-  {:i
-   {"<TAB>"
-    [(fn [] (u.termcode (if (= 1 (nvim.fn.pumvisible)) "<Down>" "<TAB>")))
-     {:noremap true :silent true :expr true}
-     "Autocomplete" "smart_tab_tab" "Smart tab (Tab)"]
-
-    "<S-TAB>"
-    [(fn [] (u.termcode (if (= 1 (nvim.fn.pumvisible)) "<Up>" "<TAB>")))
-     {:noremap true :silent true :expr true}
-     "Autocomplete" "smart_tab_shift_tab" "Smart tab (Shift-Tab)"]
-
-    "<CR>"
-    [(fn [] (u.termcode (if (= 1 (nvim.fn.pumvisible)) "<C-y>" "<C-g>u<CR>")))
-     {:noremap true :expr true}
-     "Autocomplete" "smart_tab_return" "Smart tab (Enter)"]}
-
-
-   :n
-   {"<leader>ff"
-    [teleb.find_files ;;"<cmd>Telescope find_files<CR>"
-     {:noremap true}
-     "Files" "telescope_find_files" "Find files via Telescope"]
-    }})
-(comment "<leader>fp"
-      ["<cmd>Telescope mapper<CR>"
-       {:noremap true}
-       "Mappings" "mapper_show_mappings" "Show mappings via Mapper"])
-
-;; (tset _G "shit" teleb.find_files)
-;; (nvim.set_keymap :n "<leader>ff" "v:lua.shit()" {:noremap true})
+(require :magic.mappings)
