@@ -107,10 +107,10 @@ mode "nag" {
     # Lock the screen
     bindsym $mod+x exec "swaylock ; brightnessctl s 100"
     # Start a terminal
-    bindsym $mod+Return exec $term
+    bindsym $mod+space exec $term
 
     # Kill focused window
-    bindsym $mod+Shift+q kill
+    bindsym $mod+q kill
 
     # Start your launcher
     bindsym $mod+d exec rofi -no-lazy-grab -show drun -modi drun
@@ -124,11 +124,10 @@ mode "nag" {
     floating_modifier $mod normal
 
     # Reload the configuration file
-    bindsym $mod+Shift+c reload
+    bindsym $mod+c reload
 
     # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+e $nag -t "warning" -m "Exit Sway?" -b "Exit" "swaymsg exit" -b "Reload" "swaymsg reload"
-    #bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+    bindsym $mod+e $nag -t "warning" -m "Exit Sway?" -b "Exit" "swaymsg exit" -b "Reload" "swaymsg reload"
 #
 # Moving around:
 #

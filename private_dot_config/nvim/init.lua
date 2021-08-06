@@ -1,35 +1,328 @@
--- Welcome to your magic kit!
--- This is the first file Neovim will load.
--- We'll ensure we have a plugin manager and Aniseed.
--- This will allow us to load more Fennel based code and download more plugins.
+-- Shortcuts
 
--- Make some modules easier to access.
-local execute = vim.api.nvim_command
-local fn = vim.fn
-local fmt = string.format
+str = string
+utils = require("utils")
+nvim = utils.nvim
+augroup = utils.augroup
+bridge = utils.bridge
 
--- Work out where our plugins will be stored.
-local pack_path = fn.stdpath("data") .. "/site/pack"
+--local ex = vim.api.nvim_command
+--local fn = vim.fn
+--local fmt = string.format
+
+
+-- Bootstrapping
+
+local pack_path = nvim.fn.stdpath("data") .. "/site/pack"
 
 function ensure (user, repo)
-  -- Ensures a given github.com/USER/REPO is cloned in the pack/packer/start directory.
-  local install_path = fmt("%s/packer/start/%s", pack_path, repo, repo)
-  if fn.empty(fn.glob(install_path)) > 0 then
-    execute(fmt("!git clone https://hub.fastgit.org/%s/%s %s", user, repo, install_path))
-    execute(fmt("packadd %s", repo))
+  -- Ensures a given github.com/user/repo is cloned in the
+  -- Pack/packer/start directory.
+  local install_path =
+    string.format("%s/packer/start/%s", pack_path, repo, repo)
+  if nvim.fn.empty(nvim.fn.glob(install_path)) > 0 then
+    nvim.cmd(string.format("!git clone https://github.com/%s/%s %s",
+      user, repo, install_path))
+    nvim.cmd(string.format("packadd %s", repo))
   end
 end
 
--- Packer is our plugin manager.
+-- bootstrap some specific plugins
 ensure("wbthomason", "packer.nvim")
+-- ensure("nvim-lua", "plenary.nvim")
 
--- Aniseed compiles our Fennel code to Lua and loads it automatically.
-ensure("Olical", "aniseed")
 
--- Enable Aniseed's automatic compilation and loading of Fennel source code.
--- Aniseed looks for this when it's loaded then loads the rest of your
--- configuration if it's set.
-vim.g["aniseed#env"] = {module = "magic.init"}
+-- plugins
 
--- Now head to fnl/magic/init.fnl to continue your journey.
--- Try pressing gf on the file path to [g]o to the [f]ile.
+require("packer").startup({function()
+
+  -- package manager
+  use "wbthomason/packer.nvim"
+
+  -- configuration
+  use "norcalli/nvim_utils"
+
+  -- ui
+  use "itchyny/lightline.vim"
+  use "cocopon/iceberg.vim"
+  -- use "ncm2/float-preview.nvim"
+  use "whatyouhide/vim-lengthmatters"
+  use "beauwilliams/focus.nvim"
+
+  -- editing
+  -- use {"rhysd/vim-operator-surround",
+  --   -- reuires = {"kana/vim-operator-user"}
+  -- }
+  use "tpope/vim-surround"
+  use "wellle/targets.vim"
+  use "jiangmiao/auto-pairs"
+  --use "windwp/nvim-autopairs"
+  use "easymotion/vim-easymotion"
+  -- use "guns/vim-sexp"
+  -- use {"tpope/vim-sexp-mappings-for-regular-people",
+  --   requires = "guns/vim-sexp",
+  --   after = "guns/vim-sexp"
+  -- }
+  use "tpope/vim-commentary"
+  use "tpope/vim-sleuth"
+  -- use "tpope/vim-repeat"
+
+  -- tools
+  use "glyh/conjure"
+
+  use "airblade/vim-gitgutter"
+  use { "nvim-telescope/telescope.nvim",
+    requires = {"nvim-lua/popup.nvim", "nvim-lua/plenary.nvim"}
+  }
+  use { "lazytanuki/nvim-mapper",
+    requires = "nvim-telescope/telescope.nvim"
+  }
+  use "hrsh7th/nvim-compe"
+  use { "tami5/compe-conjure", requires = "hrsh7th/nvim-compe" }
+  use "L3MON4D3/LuaSnip"
+  -- use { "Shougo/deoplete.nvim",
+  --   run = {"updateremoteplugins"}
+  -- }
+  -- use { "deoplete-plugins/deoplete-lsp",
+  --   requires = "Shougo/deoplete.nvim"
+  -- }
+  use "dense-analysis/ale"
+  use "neovim/nvim-lspconfig"
+  use { "nvim-telescope/telescope-frecency.nvim",
+    requires = {"nvim-telescope/telescope.nvim", "tami5/sql.nvim"}
+  }
+  -- use "glepnir/lspsaga.nvim"
+  use { "nvim-treesitter/nvim-treesitter",
+    run = "tsupdate"
+  }
+  use { "nvim-treesitter/playground",
+    requires = {"nvim-treesitter/nvim-treesitter"}
+  }
+  use { "glyh/nvim-treesitter-textobjects",
+      --"nvim-treesitter/nvim-treesitter-textobjects",
+    requires = {"nvim-treesitter/nvim-treesitter"}
+  }
+
+  -- language specific
+  use "bakpakin/fennel.vim"
+  use "Olical/aniseed"
+  use {"glyh/conjure-lua",
+       requires = {"Olical/conjure"}
+  }
+  -- use { "tweekmonster/deoplete-clang2",
+  --   requires = "shougo/deoplete.nvim"
+  -- }
+end,config = {
+  git = {default_url_format = "https://hub.fastgit.org/%s"}
+}})
+
+
+-- Some basic informations
+
+local lisp_file_types = "clojure,fennel"
+
+
+-- general
+
+nvim.o.termguicolors = true
+nvim.o.mouse = "a"
+nvim.o.updatetime = 500
+nvim.o.timeoutlen = 500
+nvim.o.sessionoptions = "blank,curdir,folds,help,tabpages,winsize"
+nvim.o.completeopt = "menuone,noselect"
+nvim.o.list = true
+nvim.o.number = true
+nvim.o.splitright = true
+nvim.o.hidden = true
+nvim.cmd("set nowrap") -- nvim.o.nowrap = true -- nvim.cmd("set nowrap")
+
+
+-- ui
+
+nvim.cmd("colorscheme iceberg")
+nvim.g.lightline = {colorscheme = "iceberg"}
+nvim.g["float_preview#docked"] = false
+nvim.g["float_preview#max_width"] = 80
+nvim.g["float_preview#max_height"] = 40
+nvim.g["lengthmatters_exluded"] = {
+  "unite", "tagbar", "startify", "gundo", "vimshell", "w3m", "nerdtree", "help",
+  "qf", "dirvish", "markdown", "tex", "conjure-log-[0-9]\\+\\.[a-z]\\+", ".*\\.md"
+}
+require("focus").width = math.floor(0.6 * nvim.o.columns)
+
+-- telescope
+local tele = require("telescope")
+local mapper = require("nvim-mapper")
+tele.load_extension("frecency")
+tele.load_extension("mapper")
+tele.setup {pickers = {buffers = { theme = "dropdown", previewer = false }}}
+mapper.setup {no_map = true}
+
+
+-- ide supports:
+
+-- linter
+nvim.g.ale_lint_on_text_changed = true
+nvim.g.ale_fixers = {["*"]={"remove_trailing_lines", "trim_whitespace"}}
+nvim.g.ale_fix_on_save = true
+nvim.g.ale_pattern_options = {
+  ["conjure-log-[0-9]\\+\\.[a-z]\\+"] = {
+    ["ale_linters"] = {},
+    ["ale_fixers"] = {}
+  }
+}
+
+-- interactive development
+nvim.g["conjure#log#hud#border"] = "none"
+nvim.g["conjure#filetypes"] = {"clojure", "fennel", "janet", "racket", "scheme"}
+nvim.g["conjure#filetypes_non_lisp"] = {"lua"}
+--lisp_file_types .. ",lua"
+nvim.g["conjure#filetype#lua"] = "conjure.client.lua.neovim"
+nvim.g["conjure#filetype_suffixes#lua"] = {"lua"}
+--nvim.g["conjure#"]
+--nvim.g["conjure#mapping#prefix"] = "<localleader>c"
+nvim.g["conjure#client#fennel#aniseed#aniseed_module_prefix"] = "aniseed."
+
+-- editing
+augroup("auto_pair",
+  {{"filetype", lisp_file_types, function()
+    local auto_pairs = nvim.g.AutoPairs
+    auto_pairs["'"] = nil
+    auto_pairs["`"] = nil
+    -- print "detected lisp!"
+  end}}
+)
+nvim.g.sexp_filetypes = lisp_file_types
+-- TODO: FIX sexp mappings
+-- require('nvim-autopairs').setup{}
+-- require("nvim-autopairs.completion.compe").setup({
+--   map_cr = true, --  map <CR> on insert mode
+--   map_complete = true -- it will auto insert `(` after select function or method item
+-- })
+require'compe'.setup {
+  enabled = true;
+  autocomplete = true;
+  debug = false;
+  min_length = 1;
+  preselect = 'enable';
+  throttle_time = 80;
+  source_timeout = 200;
+  resolve_timeout = 800;
+  incomplete_delay = 400;
+  max_abbr_width = 100;
+  max_kind_width = 100;
+  max_menu_width = 100;
+  documentation = {
+    border = { '', '' ,'', ' ', '', '', '', ' ' },
+    -- the border option is the same as `|help nvim_open_win|`
+    winhighlight =
+      "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
+    max_width = 120,
+    min_width = 60,
+    max_height = math.floor(vim.o.lines * 0.3),
+    min_height = 1,
+  };
+
+  source = {
+    path = true,
+    buffer = true,
+    nvim_lsp = true,
+    nvim_lua = true,
+    treesitter = true,
+
+    ultisnips = false,
+    vsnip = false,
+    luasnip = true,
+
+    conjure = true
+  };
+}
+
+-- LSP
+local capabilities = nvim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+capabilities.textDocument.completion.completionItem.resolveSupport = {
+  properties = {
+    'documentation',
+    'detail',
+    'additionalTextEdits',
+  }
+}
+
+local lspconfig = require("lspconfig")
+local lspconfig_util = require("lspconfig.util")
+lspconfig.clojure_lsp.setup{
+    cmd = { "clojure-lsp" },
+    filetypes = { "clojure", "edn" },
+    root_dir =
+      lspconfig_util.root_pattern("project.clj", "deps.edn", ".git", "build.boot"),
+}
+lspconfig.clangd.setup{ }
+
+
+-- treesitter
+for _, p in pairs(require "nvim-treesitter.parsers".get_parser_configs()) do
+  p.install_info.url = p.install_info.url:gsub("github.com", "hub.fastgit.org")
+end
+
+require("nvim-treesitter.configs").setup {
+  ensure_installed =
+    {"clojure", "fish", "c", "cpp", "rust", "query", "lua", "python", "fennel"},
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false
+  },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "<localleader>v",
+      node_incremental = "go",
+      node_decremental = "gi",
+    }
+  },
+  playground = {
+    enable = true,
+    disable = {},
+    updatetime = 25,
+    -- debounced time for highlighting nodes in the playground from source code
+    persist_queries = false, -- whether the query persists across vim sessions
+    keybindings = {
+      toggle_query_editor = 'o',
+      toggle_hl_groups = 'i',
+      toggle_injected_languages = 't',
+      toggle_anonymous_nodes = 'a',
+      toggle_language_display = 'i',
+      focus_language = 'f',
+      unfocus_language = 'f',
+      update = 'r',
+      goto_node = '<CR>',
+      show_help = '?',
+    }
+  },
+  textobjects = {
+    select = {
+      enable = true,
+
+      -- automatically jump forward to textobj, similar to targets.vim
+      lookahead = true,
+
+      keymaps = {
+        -- you can use the capture groups defined in textobjects.scm
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        ["ic"] = "@class.inner",
+
+        -- -- or you can define your own textobjects like this
+        -- ["if"] = {
+        --   python = "(function_definition) @function",
+        --   cpp = "(function_definition) @function",
+        --   c = "(function_definition) @function",
+        --   java = "(method_declaration) @function",
+        -- },
+      }
+    },
+  },
+}
+
+require("mappings")
