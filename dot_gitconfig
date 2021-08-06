@@ -6,8 +6,18 @@
 [pull]
 	rebase = false
 [http]
-	proxy = 
+	proxy =
 [difftool]
 	prompt = false
 [difftool "vimdiff"]
 	path = nvim
+[alias]
+	l = log --oneline --decorate --graph
+	d = diff
+	a = add
+	c = commit
+	o = checkout
+	s = status
+	f = config
+	i = config --get-regexp alias
+	t = difftool

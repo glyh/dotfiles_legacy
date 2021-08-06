@@ -6,7 +6,9 @@ local mapper = require("nvim-mapper")
 nvim.g.mapleader = " "
 nvim.g.maplocalleader = ","
 
-mapper.map("n", "<leader>q", "<cmd>quit<CR>", {noremap = true},
+mapper.map("n", "<leader>q", "<cmd>qa<CR>", {noremap = true},
+  "General", "quit_all_shorcut", "Exit vim")
+mapper.map("n", "<localleader>q", "<cmd>q<CR>", {noremap = true},
   "General", "quit_shorcut", "Exit current buffer")
 
 mapper.map("v", "<M-e>", "<Esc>", {noremap = true},
