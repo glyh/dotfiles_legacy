@@ -21,3 +21,5 @@
 	f = config
 	i = config --get-regexp alias
 	t = difftool
+	p = pull
+	u = push
