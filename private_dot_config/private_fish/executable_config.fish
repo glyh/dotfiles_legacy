@@ -1,3 +1,5 @@
+fish_vi_key_bindings
+
 set -gxa PATH                ~/.local/bin
 set -gxa PATH                ~/.nimble/bin
 set -gxa PATH                ~/.yarn/bin
@@ -23,7 +25,7 @@ alias en="nvim -u NONE"
 alias er="sudoedit"
 
 function ec
-    echo "cd ~/.config/nvim/; and nvim init.lua " | fish /dev/stdin
+    echo "cd ~/.config/nvim/; and nvim init.lua lua/*.lua " | fish /dev/stdin
 end
 
 function ef
@@ -32,6 +34,21 @@ end
 
 function es
     echo "cd ~/.config/sway; and nvim config" | fish /dev/stdin
+end
+
+# rerun
+function rr
+  set PREV_CMD (history | head -1)
+  set PREV_OUTPUT (eval $PREV_CMD)
+  set CMD $argv[1]
+  echo "Running '$CMD $PREV_OUTPUT'"
+  eval "$CMD $PREV_OUTPUT"
+end
+
+function f
+  ranger --choosedir=$HOME/.rangerdir
+  set LASTDIR (cat $HOME/.rangerdir)
+  cd $LASTDIR
 end
 
 alias g="git"
@@ -44,7 +61,6 @@ alias pa="proxychains paru"
 alias a="paru"
 alias h="chezmoi"
 alias rm="rm -i"
-alias n="ranger"
 
 function expand-dot-to-parent-directory-path -d 'expand ... to ../.. etc'
     # Get commandline up to cursor
@@ -58,6 +74,25 @@ function expand-dot-to-parent-directory-path -d 'expand ... to ../.. etc'
     end
 end
 
-bind . 'expand-dot-to-parent-directory-path'
+function bind_bang
+    switch (commandline -t)[-1]
+        case "!"
+            commandline -t $history[1]; commandline -f repaint
+        case "*"
+            commandline -i !
+    end
+end
 
-fish_vi_key_bindings
+function bind_dollar
+    switch (commandline -t)[-1]
+        case "!"
+            commandline -t ""
+            commandline -f history-token-search-backward
+        case "*"
+            commandline -i '$'
+    end
+end
+
+bind . 'expand-dot-to-parent-directory-path'
+bind ! bind_bang
+bind '$' bind_dollar

@@ -8,23 +8,25 @@ nvim.g.maplocalleader = ","
 
 mapper.map("n", "<leader>q", "<cmd>qa<CR>", {noremap = true},
   "General", "quit_all_shorcut", "Exit vim")
+mapper.map("n", "<leader>v", "<cmd>vsplit<CR>", {noremap = true},
+  "General", "quit_new_vsplit", "New vertical split.")
 mapper.map("n", "<localleader>q", "<cmd>q<CR>", {noremap = true},
   "General", "quit_shorcut", "Exit current buffer")
 
 mapper.map("v", "<M-e>", "<Esc>", {noremap = true},
-  "General", "escape_v", "Escape to normal mode")
+  "General", "escape_v", "Escape to normal mode from visual mode")
 mapper.map("x", "<M-e>", "<Esc>", {noremap = true},
-  "General", "escape_x", "Escape to normal mode")
+  "General", "escape_x", "Escape to normal mode from visual mode")
 mapper.map("s", "<M-e>", "<Esc>", {noremap = true},
-  "General", "escape_s", "Escape to normal mode")
+  "General", "escape_s", "Escape to normal mode from visual mode")
 mapper.map("o", "<M-e>", "<Esc>", {noremap = true},
-  "General", "escape_o", "Escape to normal mode")
+  "General", "escape_o", "Escape to normal mode from visual mode")
 mapper.map("l", "<M-e>", "<Esc>", {noremap = true},
-  "General", "escape_l", "Escape to normal mode")
+  "General", "escape_l", "Escape to normal mode from visual mode")
 mapper.map("c", "<M-e>", "<Esc>", {noremap = true},
-  "General", "escape_c", "Escape to normal mode")
+  "General", "escape_c", "Escape to normal mode from visual mode")
 mapper.map("t", "<M-e>", "<Esc>", {noremap = true},
-  "General", "escape_t", "Escape to normal mode")
+  "General", "escape_t", "Escape to normal mode from visual mode")
 
 mapper.map("n", ";", ":", {noremap = true},
   "General", "cmd_mode", "Go to command mode")
@@ -53,8 +55,6 @@ local tab_complete = bridge(function()
     return vim.fn['compe#complete']()
   end
 end, "expr")
-mapper.map("i", "<Tab>", tab_complete, {expr = true, noremap = true},
-  "Autocomplete", "tab_complete_i", "Tab complete.")
 local shift_tab_complete = bridge(function()
   if vim.fn.pumvisible() == 1 then
     return "<C-p>"
@@ -110,9 +110,24 @@ mapper.map("n", "<localleader>ll", bridge(function()
     nvim.cmd("ConjureLogVSplit")
   end, "cmd_keys"), {noremap = true},
   "Conjure", "conjure_log_toggle", "Toggle conjure buffer to side.")
---
--- mapper.map_virtual("n", "<localleader>cf", "(unknown)", {},
---   "Conjure", "conjure_connect", "Connect to backend repl from conjure.")
+
+-- easymotion
+mapper.map("", "<leader>l", "<Plug>(easymotion-bd-jk)", {},
+  "Easymotion", "easymotion_bd_jk", "Find a line")
+mapper.map("n", "<leader>l", "<Plug>(easymotion-overwin-line)", {},
+  "Easymotion", "easymotion_overwin_line", "Find a line over windows")
+mapper.map("", "<leader>f", "<Plug>(easymotion-bd-f2)", {},
+  "Easymotion", "easymotion_bd_f2", "Find two chars")
+mapper.map("n", "<leader>f", "<Plug>(easymotion-overwin-f2)", {},
+  "Easymotion", "easymotion_overwin_f2", "Find two chars over windows")
+
+-- surround
+-- mapper.map("", "sa", "<Plug>(operator-surround-append)", {silent = true},
+--   "Surround", "surround_append", "Operator to append surround")
+-- mapper.map("", "sd", "<Plug>(operator-surround-delete)", {silent = true},
+--   "Surround", "surround_delete", "Operator to delete surround")
+-- mapper.map("", "sr", "<Plug>(operator-surround-replace)", {silent = true},
+--   "Surround", "surround_replace", "Operator to replace surround")
 
 -- layout
 mapper.map("c", "hv", "vert help", {noremap = true},

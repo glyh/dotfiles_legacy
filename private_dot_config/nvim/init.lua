@@ -6,23 +6,19 @@ nvim = utils.nvim
 augroup = utils.augroup
 bridge = utils.bridge
 
---local ex = vim.api.nvim_command
---local fn = vim.fn
---local fmt = string.format
-
 
 -- Bootstrapping
 
 local pack_path = nvim.fn.stdpath("data") .. "/site/pack"
 
-function ensure (user, repo)
+function ensure(user, repo)
   -- Ensures a given github.com/user/repo is cloned in the
   -- Pack/packer/start directory.
   local install_path =
-    string.format("%s/packer/start/%s", pack_path, repo, repo)
+  string.format("%s/packer/start/%s", pack_path, repo, repo)
   if nvim.fn.empty(nvim.fn.glob(install_path)) > 0 then
     nvim.cmd(string.format("!git clone https://github.com/%s/%s %s",
-      user, repo, install_path))
+    user, repo, install_path))
     nvim.cmd(string.format("packadd %s", repo))
   end
 end
@@ -51,24 +47,26 @@ require("packer").startup({function()
 
   -- editing
   -- use {"rhysd/vim-operator-surround",
-  --   -- reuires = {"kana/vim-operator-user"}
+  --   requires = {"kana/vim-operator-user"}
   -- }
   use "tpope/vim-surround"
   use "wellle/targets.vim"
   use "jiangmiao/auto-pairs"
   --use "windwp/nvim-autopairs"
   use "easymotion/vim-easymotion"
-  -- use "guns/vim-sexp"
-  -- use {"tpope/vim-sexp-mappings-for-regular-people",
-  --   requires = "guns/vim-sexp",
-  --   after = "guns/vim-sexp"
-  -- }
+  use "guns/vim-sexp"
+  use {"tpope/vim-sexp-mappings-for-regular-people",
+    requires = "guns/vim-sexp",
+    -- after = "guns/vim-sexp"
+  }
   use "tpope/vim-commentary"
   use "tpope/vim-sleuth"
+  use "mg979/vim-visual-multi"
   -- use "tpope/vim-repeat"
 
   -- tools
-  use "glyh/conjure"
+  use "Olical/conjure"
+  -- use "glyh/conjure"
 
   use "airblade/vim-gitgutter"
   use { "nvim-telescope/telescope.nvim",
@@ -78,8 +76,9 @@ require("packer").startup({function()
     requires = "nvim-telescope/telescope.nvim"
   }
   use "hrsh7th/nvim-compe"
+  use "hrsh7th/vim-vsnip"
   use { "tami5/compe-conjure", requires = "hrsh7th/nvim-compe" }
-  use "L3MON4D3/LuaSnip"
+  -- use "vim-scripts/UltiSnips"
   -- use { "Shougo/deoplete.nvim",
   --   run = {"updateremoteplugins"}
   -- }
@@ -87,6 +86,8 @@ require("packer").startup({function()
   --   requires = "Shougo/deoplete.nvim"
   -- }
   use "dense-analysis/ale"
+  --use "mfussenegger/nvim-lint"
+
   use "neovim/nvim-lspconfig"
   use { "nvim-telescope/telescope-frecency.nvim",
     requires = {"nvim-telescope/telescope.nvim", "tami5/sql.nvim"}
@@ -98,17 +99,20 @@ require("packer").startup({function()
   use { "nvim-treesitter/playground",
     requires = {"nvim-treesitter/nvim-treesitter"}
   }
-  use { "glyh/nvim-treesitter-textobjects",
-      --"nvim-treesitter/nvim-treesitter-textobjects",
+  use {"nvim-treesitter/nvim-treesitter-textobjects",
     requires = {"nvim-treesitter/nvim-treesitter"}
   }
+--  use { "glyh/nvim-treesitter-textobjects",
+--      --"nvim-treesitter/nvim-treesitter-textobjects",
+--    requires = {"nvim-treesitter/nvim-treesitter"}
+--  }
 
   -- language specific
   use "bakpakin/fennel.vim"
   use "Olical/aniseed"
-  use {"glyh/conjure-lua",
-       requires = {"Olical/conjure"}
-  }
+  -- use {"glyh/conjure-lua",
+  --      requires = {"Olical/conjure"}
+  -- }
   -- use { "tweekmonster/deoplete-clang2",
   --   requires = "shougo/deoplete.nvim"
   -- }
@@ -171,6 +175,7 @@ nvim.g.ale_pattern_options = {
     ["ale_fixers"] = {}
   }
 }
+nvim.g.ale_disable_lsp = 1 -- We already have neovim's built in lsp
 
 -- interactive development
 nvim.g["conjure#log#hud#border"] = "none"
@@ -230,9 +235,9 @@ require'compe'.setup {
     nvim_lua = true,
     treesitter = true,
 
-    ultisnips = false,
-    vsnip = false,
-    luasnip = true,
+    --ultisnips = true,
+    vsnip = true,
+    --luasnip = false,
 
     conjure = true
   };
@@ -258,7 +263,30 @@ lspconfig.clojure_lsp.setup{
       lspconfig_util.root_pattern("project.clj", "deps.edn", ".git", "build.boot"),
 }
 lspconfig.clangd.setup{ }
-
+-- Linters
+-- local linter_languages = {
+--   clojure = {
+--     {
+--       formatCommand = "clj-kondo --lint - ",
+--       lintStdin = true
+--     }
+--   },
+--   cpp = {
+--     {
+--       formatCommand = "clang-tidy "
+--     }
+--
+--   }
+-- }
+-- lspconfig.efm.setup {
+--   settings = {
+--     languages = linter_languages,
+--     log_level = 1,
+--     log_file = '/tmp/efm.log'
+--   },
+--   filetypes = vim.tbl_keys(linter_languages),
+--   root_dir = lspconfig.util.root_pattern(".git")
+-- }
 
 -- treesitter
 for _, p in pairs(require "nvim-treesitter.parsers".get_parser_configs()) do
@@ -307,19 +335,10 @@ require("nvim-treesitter.configs").setup {
       lookahead = true,
 
       keymaps = {
-        -- you can use the capture groups defined in textobjects.scm
         ["af"] = "@function.outer",
         ["if"] = "@function.inner",
         ["ac"] = "@class.outer",
         ["ic"] = "@class.inner",
-
-        -- -- or you can define your own textobjects like this
-        -- ["if"] = {
-        --   python = "(function_definition) @function",
-        --   cpp = "(function_definition) @function",
-        --   c = "(function_definition) @function",
-        --   java = "(method_declaration) @function",
-        -- },
       }
     },
   },
