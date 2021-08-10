@@ -25,7 +25,6 @@ end
 
 -- bootstrap some specific plugins
 ensure("wbthomason", "packer.nvim")
--- ensure("nvim-lua", "plenary.nvim")
 
 
 -- plugins
@@ -41,23 +40,17 @@ require("packer").startup({function()
   -- ui
   use "itchyny/lightline.vim"
   use "cocopon/iceberg.vim"
-  -- use "ncm2/float-preview.nvim"
   use "whatyouhide/vim-lengthmatters"
   use "beauwilliams/focus.nvim"
 
   -- editing
-  -- use {"rhysd/vim-operator-surround",
-  --   requires = {"kana/vim-operator-user"}
-  -- }
   use "tpope/vim-surround"
   use "wellle/targets.vim"
   use "jiangmiao/auto-pairs"
-  --use "windwp/nvim-autopairs"
   use "easymotion/vim-easymotion"
   use "guns/vim-sexp"
   use {"tpope/vim-sexp-mappings-for-regular-people",
     requires = "guns/vim-sexp",
-    -- after = "guns/vim-sexp"
   }
   use "tpope/vim-commentary"
   use "tpope/vim-sleuth"
@@ -66,7 +59,6 @@ require("packer").startup({function()
 
   -- tools
   use "Olical/conjure"
-  -- use "glyh/conjure"
 
   use "airblade/vim-gitgutter"
   use { "nvim-telescope/telescope.nvim",
@@ -78,21 +70,12 @@ require("packer").startup({function()
   use "hrsh7th/nvim-compe"
   use "hrsh7th/vim-vsnip"
   use { "tami5/compe-conjure", requires = "hrsh7th/nvim-compe" }
-  -- use "vim-scripts/UltiSnips"
-  -- use { "Shougo/deoplete.nvim",
-  --   run = {"updateremoteplugins"}
-  -- }
-  -- use { "deoplete-plugins/deoplete-lsp",
-  --   requires = "Shougo/deoplete.nvim"
-  -- }
   use "dense-analysis/ale"
-  --use "mfussenegger/nvim-lint"
 
   use "neovim/nvim-lspconfig"
   use { "nvim-telescope/telescope-frecency.nvim",
     requires = {"nvim-telescope/telescope.nvim", "tami5/sql.nvim"}
   }
-  -- use "glepnir/lspsaga.nvim"
   use { "nvim-treesitter/nvim-treesitter",
     run = "tsupdate"
   }
@@ -102,20 +85,10 @@ require("packer").startup({function()
   use {"nvim-treesitter/nvim-treesitter-textobjects",
     requires = {"nvim-treesitter/nvim-treesitter"}
   }
---  use { "glyh/nvim-treesitter-textobjects",
---      --"nvim-treesitter/nvim-treesitter-textobjects",
---    requires = {"nvim-treesitter/nvim-treesitter"}
---  }
 
   -- language specific
   use "bakpakin/fennel.vim"
   use "Olical/aniseed"
-  -- use {"glyh/conjure-lua",
-  --      requires = {"Olical/conjure"}
-  -- }
-  -- use { "tweekmonster/deoplete-clang2",
-  --   requires = "shougo/deoplete.nvim"
-  -- }
 end,config = {
   git = {default_url_format = "https://hub.fastgit.org/%s"}
 }})
@@ -138,7 +111,7 @@ nvim.o.list = true
 nvim.o.number = true
 nvim.o.splitright = true
 nvim.o.hidden = true
-nvim.cmd("set nowrap") -- nvim.o.nowrap = true -- nvim.cmd("set nowrap")
+nvim.cmd("set nowrap") -- nvim.o.nowrap = true
 
 
 -- ui
@@ -184,8 +157,6 @@ nvim.g["conjure#filetypes_non_lisp"] = {"lua"}
 --lisp_file_types .. ",lua"
 nvim.g["conjure#filetype#lua"] = "conjure.client.lua.neovim"
 nvim.g["conjure#filetype_suffixes#lua"] = {"lua"}
---nvim.g["conjure#"]
---nvim.g["conjure#mapping#prefix"] = "<localleader>c"
 nvim.g["conjure#client#fennel#aniseed#aniseed_module_prefix"] = "aniseed."
 
 -- editing
@@ -194,16 +165,9 @@ augroup("auto_pair",
     local auto_pairs = nvim.g.AutoPairs
     auto_pairs["'"] = nil
     auto_pairs["`"] = nil
-    -- print "detected lisp!"
   end}}
 )
 nvim.g.sexp_filetypes = lisp_file_types
--- TODO: FIX sexp mappings
--- require('nvim-autopairs').setup{}
--- require("nvim-autopairs.completion.compe").setup({
---   map_cr = true, --  map <CR> on insert mode
---   map_complete = true -- it will auto insert `(` after select function or method item
--- })
 require'compe'.setup {
   enabled = true;
   autocomplete = true;
@@ -234,11 +198,7 @@ require'compe'.setup {
     nvim_lsp = true,
     nvim_lua = true,
     treesitter = true,
-
-    --ultisnips = true,
     vsnip = true,
-    --luasnip = false,
-
     conjure = true
   };
 }
@@ -263,30 +223,6 @@ lspconfig.clojure_lsp.setup{
       lspconfig_util.root_pattern("project.clj", "deps.edn", ".git", "build.boot"),
 }
 lspconfig.clangd.setup{ }
--- Linters
--- local linter_languages = {
---   clojure = {
---     {
---       formatCommand = "clj-kondo --lint - ",
---       lintStdin = true
---     }
---   },
---   cpp = {
---     {
---       formatCommand = "clang-tidy "
---     }
---
---   }
--- }
--- lspconfig.efm.setup {
---   settings = {
---     languages = linter_languages,
---     log_level = 1,
---     log_file = '/tmp/efm.log'
---   },
---   filetypes = vim.tbl_keys(linter_languages),
---   root_dir = lspconfig.util.root_pattern(".git")
--- }
 
 -- treesitter
 for _, p in pairs(require "nvim-treesitter.parsers".get_parser_configs()) do

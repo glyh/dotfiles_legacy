@@ -121,14 +121,6 @@ mapper.map("", "<leader>f", "<Plug>(easymotion-bd-f2)", {},
 mapper.map("n", "<leader>f", "<Plug>(easymotion-overwin-f2)", {},
   "Easymotion", "easymotion_overwin_f2", "Find two chars over windows")
 
--- surround
--- mapper.map("", "sa", "<Plug>(operator-surround-append)", {silent = true},
---   "Surround", "surround_append", "Operator to append surround")
--- mapper.map("", "sd", "<Plug>(operator-surround-delete)", {silent = true},
---   "Surround", "surround_delete", "Operator to delete surround")
--- mapper.map("", "sr", "<Plug>(operator-surround-replace)", {silent = true},
---   "Surround", "surround_replace", "Operator to replace surround")
-
 -- layout
 mapper.map("c", "hv", "vert help", {noremap = true},
   "Layout", "help_on_right",
