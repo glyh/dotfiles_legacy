@@ -282,7 +282,7 @@ exec aria2c -D
 #exec ibus-daemon --xim --daemonize -r
 #exec udiskie -a & # This is dangerous
 exec redshift &
-exec brightnessctl s 100
-exec qv2ray &
+#exec brightnessctl s 100
+#exec qv2ray &
 #exec fusuma &
 exec waybar &

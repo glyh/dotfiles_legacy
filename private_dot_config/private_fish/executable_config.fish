@@ -54,7 +54,7 @@ end
 alias g="git"
 alias l="ls"
 alias c="cd"
-alias i="brightnessctl s 100"
+alias i="sudo light"
 alias p="proxychains"
 alias pg="proxychains git"
 alias pa="proxychains paru"

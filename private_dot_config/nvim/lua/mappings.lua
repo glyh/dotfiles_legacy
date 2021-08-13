@@ -7,26 +7,21 @@ nvim.g.mapleader = " "
 nvim.g.maplocalleader = ","
 
 mapper.map("n", "<leader>q", "<cmd>qa<CR>", {noremap = true},
-  "General", "quit_all_shorcut", "Exit vim")
+  "General", "quit_all_shorcut", "Exit vim.")
 mapper.map("n", "<leader>v", "<cmd>vsplit<CR>", {noremap = true},
   "General", "quit_new_vsplit", "New vertical split.")
 mapper.map("n", "<localleader>q", "<cmd>q<CR>", {noremap = true},
-  "General", "quit_shorcut", "Exit current buffer")
+  "General", "quit_shorcut", "Exit current buffer.")
 
-mapper.map("v", "<M-e>", "<Esc>", {noremap = true},
-  "General", "escape_v", "Escape to normal mode from visual mode")
-mapper.map("x", "<M-e>", "<Esc>", {noremap = true},
-  "General", "escape_x", "Escape to normal mode from visual mode")
-mapper.map("s", "<M-e>", "<Esc>", {noremap = true},
-  "General", "escape_s", "Escape to normal mode from visual mode")
-mapper.map("o", "<M-e>", "<Esc>", {noremap = true},
-  "General", "escape_o", "Escape to normal mode from visual mode")
-mapper.map("l", "<M-e>", "<Esc>", {noremap = true},
-  "General", "escape_l", "Escape to normal mode from visual mode")
-mapper.map("c", "<M-e>", "<Esc>", {noremap = true},
-  "General", "escape_c", "Escape to normal mode from visual mode")
-mapper.map("t", "<M-e>", "<Esc>", {noremap = true},
-  "General", "escape_t", "Escape to normal mode from visual mode")
+nvim.cmd([[
+  call arpeggio#map('i', '', 0, 'jk', '<Esc>')
+  call arpeggio#map('v', '', 0, 'jk', '<Esc>')
+  call arpeggio#map('o', '', 0, 'jk', '<Esc>')
+  call arpeggio#map('c', '', 0, 'jk', '<Esc>')
+  call arpeggio#map('l', '', 0, 'jk', '<Esc>')
+  call arpeggio#map('t', '', 0, 'jk', '<Esc>')
+  call arpeggio#map('x', '', 0, 'jk', '<Esc>')
+]])
 
 mapper.map("n", ";", ":", {noremap = true},
   "General", "cmd_mode", "Go to command mode")
@@ -40,42 +35,35 @@ mapper.map("n", "<leader>j", "<C-f>", {noremap = true},
   "General", "page_down", "Page down.")
 
 -- Tab complete
-local tab_complete = bridge(function()
-  local check_back_space = function()
-      local col = nvim.fn.col('.') - 1
-      return col == 0 or nvim.fn.getline('.'):sub(col, col):match('%s') ~= nil
-  end
-  if vim.fn.pumvisible() == 1 then
-    return "<C-n>"
-  elseif vim.fn['vsnip#available'](1) == 1 then
-    return "<Plug>(vsnip-expand-or-jump)"
-  elseif check_back_space() then
-    return "<Tab>"
+
+mapper.map("i", "<Tab>", bridge(function()
+  if nvim.fn.pumvisible() == 1 then
+    return "<Down>"
   else
-    return vim.fn['compe#complete']()
+    return "<TAB>"
   end
-end, "expr")
-local shift_tab_complete = bridge(function()
-  if vim.fn.pumvisible() == 1 then
-    return "<C-p>"
-  elseif vim.fn['vsnip#jumpable'](-1) == 1 then
-    return "<Plug>(vsnip-jump-prev)"
-  else
-    return "<S-Tab>"
-  end
-end, "expr")
-mapper.map("i", "<Tab>", tab_complete, {expr = true, noremap = true},
+end, "expr"), {expr = true, noremap = true},
   "Autocomplete", "tab_complete_i", "Tab complete.")
-mapper.map("s", "<Tab>", tab_complete, {expr = true, noremap = true},
-  "Autocomplete", "tab_complete_s", "Tab complete.")
-mapper.map("i", "<S-Tab>", shift_tab_complete, {expr = true, noremap = true},
-  "Autocomplete", "tab_complete_shift_tab_i", "Shift tab for smart tab.")
-mapper.map("s", "<S-Tab>", shift_tab_complete, {expr = true, noremap = true},
-  "Autocomplete", "tab_complete_shift_tab_s", "Shift tab for smart tab.")
+mapper.map("i", "<S-Tab>", bridge(function()
+  if nvim.fn.pumvisible() == 1 then
+    return "<Up>"
+  else
+    return "<S-TAB>"
+  end
+end, "expr"), {expr = true, noremap = true},
+  "Autocomplete", "shift_tab_complete_i", "Shift tab complete.")
+-- mapper.map("i", "<Tab>", tab_complete, {expr = true, noremap = true},
+--   "Autocomplete", "tab_complete_i", "Tab complete.")
+-- mapper.map("s", "<Tab>", tab_complete, {expr = true, noremap = true},
+--   "Autocomplete", "tab_complete_s", "Tab complete.")
+-- mapper.map("i", "<S-Tab>", shift_tab_complete, {expr = true, noremap = true},
+--   "Autocomplete", "tab_complete_shift_tab_i", "Shift tab for smart tab.")
+-- mapper.map("s", "<S-Tab>", shift_tab_complete, {expr = true, noremap = true},
+--   "Autocomplete", "tab_complete_shift_tab_s", "Shift tab for smart tab.")
 
 -- Auto comfirm
-mapper.map("i", "<CR>", "compe#confirm({ 'keys' : '<CR>', 'select' : v:true })",
-  {expr=true}, "Autocomplete", "auto_confirm", "Auto confirms.")
+-- mapper.map("i", "<CR>", "compe#confirm({ 'keys' : '<CR>', 'select' : v:true })",
+--  {expr=true}, "Autocomplete", "auto_confirm", "Auto confirms.")
 
 -- telescopes
 mapper.map("n", "<leader>ff", "<cmd>Telescope find_files<CR>", {noremap = true},

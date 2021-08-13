@@ -17,7 +17,7 @@ function ensure(user, repo)
   local install_path =
   string.format("%s/packer/start/%s", pack_path, repo, repo)
   if nvim.fn.empty(nvim.fn.glob(install_path)) > 0 then
-    nvim.cmd(string.format("!git clone https://github.com/%s/%s %s",
+    nvim.cmd(string.format("!git clone https://hub.fastgit.org/%s/%s %s",
     user, repo, install_path))
     nvim.cmd(string.format("packadd %s", repo))
   end
@@ -55,7 +55,9 @@ require("packer").startup({function()
   use "tpope/vim-commentary"
   use "tpope/vim-sleuth"
   use "mg979/vim-visual-multi"
+  use "kana/vim-arpeggio"
   -- use "tpope/vim-repeat"
+  --use "pi314/ime.vim"
 
   -- tools
   use "Olical/conjure"
@@ -67,9 +69,12 @@ require("packer").startup({function()
   use { "lazytanuki/nvim-mapper",
     requires = "nvim-telescope/telescope.nvim"
   }
-  use "hrsh7th/nvim-compe"
-  use "hrsh7th/vim-vsnip"
-  use { "tami5/compe-conjure", requires = "hrsh7th/nvim-compe" }
+  use { "Shougo/deoplete.nvim",
+    run = {"UpdateRemotePlugins"}
+  }
+  use { "deoplete-plugins/deoplete-lsp",
+    requires = "Shougo/deoplete.nvim"
+  }
   use "dense-analysis/ale"
 
   use "neovim/nvim-lspconfig"
@@ -88,7 +93,11 @@ require("packer").startup({function()
 
   -- language specific
   use "bakpakin/fennel.vim"
-  use "Olical/aniseed"
+  use "janet-lang/janet.vim"
+  use { "tweekmonster/deoplete-clang2",
+    requires = "shougo/deoplete.nvim"
+  }
+  -- use "Olical/aniseed"
 end,config = {
   git = {default_url_format = "https://hub.fastgit.org/%s"}
 }})
@@ -111,6 +120,8 @@ nvim.o.list = true
 nvim.o.number = true
 nvim.o.splitright = true
 nvim.o.hidden = true
+nvim.o.expandtab = true
+nvim.o.shiftwidth = 2
 nvim.cmd("set nowrap") -- nvim.o.nowrap = true
 
 
@@ -138,6 +149,12 @@ mapper.setup {no_map = true}
 
 -- ide supports:
 
+-- autocomplete
+nvim.g["deoplete#enable_at_startup"] = 1
+nvim.fn["deoplete#custom#option"]('keyword_patterns', {
+  clojure= "[\\w!$%&*+/:<=>?@\\^_~\\-\\.#]*"
+})
+
 -- linter
 nvim.g.ale_lint_on_text_changed = true
 nvim.g.ale_fixers = {["*"]={"remove_trailing_lines", "trim_whitespace"}}
@@ -153,10 +170,9 @@ nvim.g.ale_disable_lsp = 1 -- We already have neovim's built in lsp
 -- interactive development
 nvim.g["conjure#log#hud#border"] = "none"
 nvim.g["conjure#filetypes"] = {"clojure", "fennel", "janet", "racket", "scheme"}
-nvim.g["conjure#filetypes_non_lisp"] = {"lua"}
---lisp_file_types .. ",lua"
-nvim.g["conjure#filetype#lua"] = "conjure.client.lua.neovim"
-nvim.g["conjure#filetype_suffixes#lua"] = {"lua"}
+-- nvim.g["conjure#filetypes_non_lisp"] = {"lua"}
+-- nvim.g["conjure#filetype#lua"] = "conjure.client.lua.neovim"
+-- nvim.g["conjure#filetype_suffixes#lua"] = {"lua"}
 nvim.g["conjure#client#fennel#aniseed#aniseed_module_prefix"] = "aniseed."
 
 -- editing
@@ -168,40 +184,6 @@ augroup("auto_pair",
   end}}
 )
 nvim.g.sexp_filetypes = lisp_file_types
-require'compe'.setup {
-  enabled = true;
-  autocomplete = true;
-  debug = false;
-  min_length = 1;
-  preselect = 'enable';
-  throttle_time = 80;
-  source_timeout = 200;
-  resolve_timeout = 800;
-  incomplete_delay = 400;
-  max_abbr_width = 100;
-  max_kind_width = 100;
-  max_menu_width = 100;
-  documentation = {
-    border = { '', '' ,'', ' ', '', '', '', ' ' },
-    -- the border option is the same as `|help nvim_open_win|`
-    winhighlight =
-      "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
-    max_width = 120,
-    min_width = 60,
-    max_height = math.floor(vim.o.lines * 0.3),
-    min_height = 1,
-  };
-
-  source = {
-    path = true,
-    buffer = true,
-    nvim_lsp = true,
-    nvim_lua = true,
-    treesitter = true,
-    vsnip = true,
-    conjure = true
-  };
-}
 
 -- LSP
 local capabilities = nvim.lsp.protocol.make_client_capabilities()
@@ -215,12 +197,12 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
 }
 
 local lspconfig = require("lspconfig")
-local lspconfig_util = require("lspconfig.util")
+local lsputil = require("lspconfig.util")
 lspconfig.clojure_lsp.setup{
     cmd = { "clojure-lsp" },
     filetypes = { "clojure", "edn" },
     root_dir =
-      lspconfig_util.root_pattern("project.clj", "deps.edn", ".git", "build.boot"),
+      lsputil.root_pattern("project.clj", "deps.edn", ".git", "build.boot"),
 }
 lspconfig.clangd.setup{ }
 
@@ -234,7 +216,7 @@ require("nvim-treesitter.configs").setup {
     {"clojure", "fish", "c", "cpp", "rust", "query", "lua", "python", "fennel"},
   highlight = {
     enable = true,
-    additional_vim_regex_highlighting = false
+    additional_vim_regex_highlighting = true
   },
   incremental_selection = {
     enable = true,
@@ -279,5 +261,4 @@ require("nvim-treesitter.configs").setup {
     },
   },
 }
-
 require("mappings")

@@ -24,7 +24,7 @@ utils.nvim = setmetatable({
     end
   })
 
-function utils.bridge(f, category, options)
+function utils.bridge(f, category)
   if bridge_id == nil then
     bridge_id = 1
   else
