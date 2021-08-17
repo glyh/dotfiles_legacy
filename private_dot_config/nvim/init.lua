@@ -49,7 +49,6 @@ require("packer").startup({function()
   use "jiangmiao/auto-pairs"
   use "t9md/vim-smalls"
 
-  --use "justinmk/vim-sneak"
   --use "easymotion/vim-easymotion"
   use "guns/vim-sexp"
   use {"tpope/vim-sexp-mappings-for-regular-people",
@@ -60,7 +59,6 @@ require("packer").startup({function()
   use "mg979/vim-visual-multi"
   use "kana/vim-arpeggio"
   -- use "tpope/vim-repeat"
-  --use "pi314/ime.vim"
 
   -- tools
   use "Olical/conjure"

@@ -99,15 +99,13 @@ mapper.map("n", "<localleader>ll", bridge(function()
   end, "cmd_keys"), {noremap = true},
   "Conjure", "conjure_log_toggle", "Toggle conjure buffer to side.")
 
--- easymotion
-mapper.map("", "<leader>l", "<Plug>(easymotion-bd-jk)", {},
-  "Easymotion", "easymotion_bd_jk", "Find a line")
-mapper.map("n", "<leader>l", "<Plug>(easymotion-overwin-line)", {},
-  "Easymotion", "easymotion_overwin_line", "Find a line over windows")
-mapper.map("", "<leader>f", "<Plug>(easymotion-bd-f2)", {},
-  "Easymotion", "easymotion_bd_f2", "Find two chars")
-mapper.map("n", "<leader>f", "<Plug>(easymotion-overwin-f2)", {},
-  "Easymotion", "easymotion_overwin_f2", "Find two chars over windows")
+-- smalls
+mapper.map("n", "s", "<Plug>(smalls)", {},
+  "Smalls", "smalls_n", "Easymotion like find for normal mode.")
+mapper.map("x", "s", "<Plug>(smalls)", {},
+  "Smalls", "smalls_x", "Easymotion like find for visual mode.")
+mapper.map("o", "s", "<Plug>(smalls)", {},
+  "Smalls", "smalls_o", "Easymotion like find for operator mode.")
 
 -- layout
 mapper.map("c", "hv", "vert help", {noremap = true},

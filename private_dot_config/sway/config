@@ -273,11 +273,6 @@ bindsym $mod+r mode "resize"
 #     }
 # }
 
-#
-# Vim Everywhere:
-#
-bindsym $mod+Alt+v exec bash ~/Scripts/vim-everywhere.sh
-
 include /etc/sway/config.d/*
 
 exec autotiling
@@ -286,7 +281,7 @@ exec aria2c -D
 #exec_always fcitx5 -d --replace
 #exec ibus-daemon --xim --daemonize -r
 #exec udiskie -a & # This is dangerous
-exec redshift &
+exec redshift -l 39:116 &
 #exec brightnessctl s 100
 #exec qv2ray &
 #exec fusuma &
