@@ -47,7 +47,10 @@ require("packer").startup({function()
   use "tpope/vim-surround"
   use "wellle/targets.vim"
   use "jiangmiao/auto-pairs"
-  use "easymotion/vim-easymotion"
+  use "t9md/vim-smalls"
+
+  --use "justinmk/vim-sneak"
+  --use "easymotion/vim-easymotion"
   use "guns/vim-sexp"
   use {"tpope/vim-sexp-mappings-for-regular-people",
     requires = "guns/vim-sexp",
@@ -164,15 +167,6 @@ tele.load_extension('fzf')
 tele.load_extension("frecency")
 tele.load_extension("mapper")
 
-require('telescope').setup {
-}
--- To get fzf loaded and working with telescope, you need to call
--- load_extension, somewhere after setup function:
-require('telescope').load_extension('fzf')
-
-
-
-
 -- ide supports:
 
 -- autocomplete
@@ -237,13 +231,13 @@ lspconfig.clangd.setup{ }
 lspconfig.rust_analyzer.setup{  }
 
 -- treesitter
-for _, p in pairs(require "nvim-treesitter.parsers".get_parser_configs()) do
+for _, p in pairs(require("nvim-treesitter.parsers").get_parser_configs()) do
   p.install_info.url = p.install_info.url:gsub("github.com", "hub.fastgit.org")
 end
 
-require("nvim-treesitter.configs").setup {
+require("nvim-treesitter.configs").setup({
   ensure_installed =
-    {"clojure", "fish", "c", "cpp", "rust", "query", "lua", "python", "fennel"},
+  {"clojure", "fish", "c", "cpp", "rust", "query", "lua", "python", "fennel"},
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false
@@ -290,5 +284,5 @@ require("nvim-treesitter.configs").setup {
       }
     },
   },
-}
+})
 require("mappings")

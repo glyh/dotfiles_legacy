@@ -273,6 +273,11 @@ bindsym $mod+r mode "resize"
 #     }
 # }
 
+#
+# Vim Everywhere:
+#
+bindsym $mod+Alt+v exec bash ~/Scripts/vim-everywhere.sh
+
 include /etc/sway/config.d/*
 
 exec autotiling
