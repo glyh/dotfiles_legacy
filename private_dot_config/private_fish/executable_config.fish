@@ -7,8 +7,8 @@ set -gxa PATH                ~/.cargo/bin
 set -gxa PATH                /usr/lib/jvm/default/bin
 set -gx  XDG_CONFIG_HOME     ~/.config
 set -gx  XDG_USER_CONFIG_DIR ~/.config
-set -gx  JAVA_HOME           /usr/lib/jvm/default
-set -gx  CLASSPATH           /usr/share/java/antlr-complete.jar
+#set -gx  JAVA_HOME           /usr/lib/jvm/default
+#set -gx  CLASSPATH           /usr/share/java/antlr-complete.jar
 #set -gx  BOOT_JVM_OPTIONS    "--add-modules java.xml.bind"
 #set -gx  CARP_DIR ~/.carp
 set -gx  VISUAL              nvim
@@ -61,6 +61,8 @@ alias pa="proxychains paru"
 alias a="paru"
 alias h="chezmoi"
 alias rm="rm -i"
+
+zoxide init fish | source
 
 function expand-dot-to-parent-directory-path -d 'expand ... to ../.. etc'
     # Get commandline up to cursor

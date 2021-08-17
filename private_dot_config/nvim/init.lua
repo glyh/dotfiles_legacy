@@ -66,6 +66,7 @@ require("packer").startup({function()
   use { "nvim-telescope/telescope.nvim",
     requires = {"nvim-lua/popup.nvim", "nvim-lua/plenary.nvim"}
   }
+  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
   use { "lazytanuki/nvim-mapper",
     requires = "nvim-telescope/telescope.nvim"
   }
@@ -94,7 +95,7 @@ require("packer").startup({function()
   -- language specific
   use "bakpakin/fennel.vim"
   use "janet-lang/janet.vim"
-  use { "tweekmonster/deoplete-clang2",
+  use { "deoplete-plugins/deoplete-clang",
     requires = "shougo/deoplete.nvim"
   }
   -- use "Olical/aniseed"
@@ -122,7 +123,7 @@ nvim.o.splitright = true
 nvim.o.hidden = true
 nvim.o.expandtab = true
 nvim.o.shiftwidth = 2
-nvim.cmd("set nowrap") -- nvim.o.nowrap = true
+nvim.cmd("set wrap") -- nvim.o.nowrap = true
 
 
 -- ui
@@ -132,19 +133,44 @@ nvim.g.lightline = {colorscheme = "iceberg"}
 nvim.g["float_preview#docked"] = false
 nvim.g["float_preview#max_width"] = 80
 nvim.g["float_preview#max_height"] = 40
-nvim.g["lengthmatters_exluded"] = {
+nvim.g["lengthmatters_excluded"] = {
   "unite", "tagbar", "startify", "gundo", "vimshell", "w3m", "nerdtree", "help",
-  "qf", "dirvish", "markdown", "tex", "conjure-log-[0-9]\\+\\.[a-z]\\+", ".*\\.md"
+  "qf", "dirvish", "markdown", "tex", "conjure-log-[0-9]\\+\\.[a-z]\\+", --".*\\.md"
 }
 require("focus").width = math.floor(0.6 * nvim.o.columns)
 
 -- telescope
 local tele = require("telescope")
 local mapper = require("nvim-mapper")
+tele.setup({
+  pickers = {
+    buffers = {
+      theme = "dropdown",
+      previewer = false
+    }
+  },
+  extensions = {
+    fzf = {
+      fuzzy = true,                    -- false will only do exact matching
+      override_generic_sorter = true, -- override the generic sorter
+      override_file_sorter = true,     -- override the file sorter
+      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                                       -- the default case_mode is "smart_case"
+    }
+  }
+})
+mapper.setup({no_map = true})
+tele.load_extension('fzf')
 tele.load_extension("frecency")
 tele.load_extension("mapper")
-tele.setup {pickers = {buffers = { theme = "dropdown", previewer = false }}}
-mapper.setup {no_map = true}
+
+require('telescope').setup {
+}
+-- To get fzf loaded and working with telescope, you need to call
+-- load_extension, somewhere after setup function:
+require('telescope').load_extension('fzf')
+
+
 
 
 -- ide supports:
@@ -154,6 +180,9 @@ nvim.g["deoplete#enable_at_startup"] = 1
 nvim.fn["deoplete#custom#option"]('keyword_patterns', {
   clojure= "[\\w!$%&*+/:<=>?@\\^_~\\-\\.#]*"
 })
+nvim.cmd([[
+  autocmd FileType TelescopePrompt call deoplete#custom#buffer_option('auto_complete', v:false)
+]])
 
 -- linter
 nvim.g.ale_lint_on_text_changed = true
@@ -205,6 +234,7 @@ lspconfig.clojure_lsp.setup{
       lsputil.root_pattern("project.clj", "deps.edn", ".git", "build.boot"),
 }
 lspconfig.clangd.setup{ }
+lspconfig.rust_analyzer.setup{  }
 
 -- treesitter
 for _, p in pairs(require "nvim-treesitter.parsers".get_parser_configs()) do
@@ -216,7 +246,7 @@ require("nvim-treesitter.configs").setup {
     {"clojure", "fish", "c", "cpp", "rust", "query", "lua", "python", "fennel"},
   highlight = {
     enable = true,
-    additional_vim_regex_highlighting = true
+    additional_vim_regex_highlighting = false
   },
   incremental_selection = {
     enable = true,

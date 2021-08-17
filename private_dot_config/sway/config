@@ -252,7 +252,7 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-for_window [app_id="Google-chrome"] border none
+#for_window [app_id="Google-chrome"] border none
 
 #
 # Status Bar:
