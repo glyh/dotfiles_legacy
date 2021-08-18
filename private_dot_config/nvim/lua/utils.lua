@@ -70,10 +70,26 @@ function utils.augroup(group_name, definition)
     if type(def) == "table" and type(def[#def]) == "function" then
       def[#def] = utils.bridge(def[#def], "cmd")
     end
-    local command = table.concat(vim.tbl_flatten{"autocmd", def}, " ")
+    local command = table.concat(nvim.tbl_flatten{"autocmd", def}, " ")
     nvim.api.command(command)
   end
   nvim.api.command("augroup end")
+end
+
+-- Bootstrapping
+
+local pack_path = utils.nvim.fn.stdpath("data") .. "/site/pack"
+
+function utils.ensure(user, repo)
+  -- Ensures a given github.com/user/repo is cloned in the
+  -- Pack/packer/start directory.
+  local install_path =
+  string.format("%s/packer/start/%s", pack_path, repo, repo)
+  if nvim.fn.empty(nvim.fn.glob(install_path)) > 0 then
+    nvim.cmd(string.format("!git clone https://hub.fastgit.org/%s/%s %s",
+    user, repo, install_path))
+    nvim.cmd(string.format("packadd %s", repo))
+  end
 end
 
 return utils

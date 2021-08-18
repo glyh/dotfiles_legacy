@@ -202,6 +202,9 @@ mode "nag" {
 
     # Move focus to the parent container
     bindsym $mod+a focus parent
+
+    # Toggle between workspace
+    bindsym $mod+Tab workspace back_and_forth
 #
 # Function keys:
 #

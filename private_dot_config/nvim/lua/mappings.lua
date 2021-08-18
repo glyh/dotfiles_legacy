@@ -1,5 +1,13 @@
 -- mappings
+local utils = require("utils")
+local bridge = utils.bridge
+local nvim = utils.nvim
+
 local mapper = require("nvim-mapper")
+if mapper == nil then
+  return
+end
+
 -- Principle: Avoid Ctrl, Meta, Esc and keys that are fucking hard to touch!
 
 -- basics
@@ -13,14 +21,18 @@ mapper.map("n", "<leader>v", "<cmd>vsplit<CR>", {noremap = true},
 mapper.map("n", "<localleader>q", "<cmd>q<CR>", {noremap = true},
   "General", "quit_shorcut", "Exit current buffer.")
 
+-- In case arpeggio is not installed
 nvim.cmd([[
-  call arpeggio#map('i', '', 0, 'jk', '<Esc>')
-  call arpeggio#map('v', '', 0, 'jk', '<Esc>')
-  call arpeggio#map('o', '', 0, 'jk', '<Esc>')
-  call arpeggio#map('c', '', 0, 'jk', '<Esc>')
-  call arpeggio#map('l', '', 0, 'jk', '<Esc>')
-  call arpeggio#map('t', '', 0, 'jk', '<Esc>')
-  call arpeggio#map('x', '', 0, 'jk', '<Esc>')
+  try
+    call arpeggio#map('i', '', 0, 'jk', '<Esc>')
+    call arpeggio#map('v', '', 0, 'jk', '<Esc>')
+    call arpeggio#map('o', '', 0, 'jk', '<Esc>')
+    call arpeggio#map('c', '', 0, 'jk', '<Esc>')
+    call arpeggio#map('l', '', 0, 'jk', '<Esc>')
+    call arpeggio#map('t', '', 0, 'jk', '<Esc>')
+    call arpeggio#map('x', '', 0, 'jk', '<Esc>')
+  catch
+  endtry
 ]])
 
 mapper.map("n", ";", ":", {noremap = true},

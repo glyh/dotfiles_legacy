@@ -60,7 +60,7 @@ alias pg="proxychains git"
 alias pa="proxychains paru"
 alias a="paru"
 alias h="chezmoi"
-alias rm="rm -i"
+alias rm="trash-put"
 
 zoxide init fish | source
 
