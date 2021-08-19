@@ -1,10 +1,5 @@
--- mappings
-local utils = require("utils")
-local bridge = utils.bridge
-local nvim = utils.nvim
-
-local mapper = require("nvim-mapper")
-if mapper == nil then
+local mapper = prequire("nvim-mapper")
+if not mapper then
   return
 end
 
@@ -14,11 +9,13 @@ end
 nvim.g.mapleader = " "
 nvim.g.maplocalleader = ","
 
-mapper.map("n", "<leader>q", "<cmd>qa<CR>", {noremap = true},
+mapper.map("n", "<leader>e", "<cmd>qa<CR>", {noremap = true},
   "General", "quit_all_shorcut", "Exit vim.")
+mapper.map("n", "<leader>s", "<cmd>split<CR>", {noremap = true},
+  "General", "quit_new_hsplit", "New horizontal split.")
 mapper.map("n", "<leader>v", "<cmd>vsplit<CR>", {noremap = true},
   "General", "quit_new_vsplit", "New vertical split.")
-mapper.map("n", "<localleader>q", "<cmd>q<CR>", {noremap = true},
+mapper.map("n", "<leader>q", "<cmd>q<CR>", {noremap = true},
   "General", "quit_shorcut", "Exit current buffer.")
 
 -- In case arpeggio is not installed
@@ -46,45 +43,61 @@ mapper.map("n", "<leader>k", "<C-b>", {noremap = true},
 mapper.map("n", "<leader>j", "<C-f>", {noremap = true},
   "General", "page_down", "Page down.")
 
--- Tab complete
+-- Tab complete & snippet complete
 
-mapper.map("i", "<Tab>", bridge(function()
-  if nvim.fn.pumvisible() == 1 then
-    return "<Down>"
-  else
-    return "<TAB>"
+local function tab_complete()
+  local luasnip = require('luasnip')
+  local check_back_space = function()
+      local col = vim.fn.col('.') - 1
+      return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') ~= nil
   end
-end, "expr"), {expr = true, noremap = true},
-  "Autocomplete", "tab_complete_i", "Tab complete.")
-mapper.map("i", "<S-Tab>", bridge(function()
-  if nvim.fn.pumvisible() == 1 then
-    return "<Up>"
+  if vim.fn.pumvisible() == 1 then
+      return "<C-n>"
+  elseif luasnip and luasnip.expand_or_jumpable() then
+      return "<Plug>luasnip-expand-or-jump"
+  elseif check_back_space() then
+      return "<Tab>"
   else
-    return "<S-TAB>"
+      return vim.fn['compe#complete']()
   end
-end, "expr"), {expr = true, noremap = true},
-  "Autocomplete", "shift_tab_complete_i", "Shift tab complete.")
--- mapper.map("i", "<Tab>", tab_complete, {expr = true, noremap = true},
---   "Autocomplete", "tab_complete_i", "Tab complete.")
--- mapper.map("s", "<Tab>", tab_complete, {expr = true, noremap = true},
---   "Autocomplete", "tab_complete_s", "Tab complete.")
--- mapper.map("i", "<S-Tab>", shift_tab_complete, {expr = true, noremap = true},
---   "Autocomplete", "tab_complete_shift_tab_i", "Shift tab for smart tab.")
--- mapper.map("s", "<S-Tab>", shift_tab_complete, {expr = true, noremap = true},
---   "Autocomplete", "tab_complete_shift_tab_s", "Shift tab for smart tab.")
+end
+local function s_tab_complete()
+  local luasnip = require('luasnip')
+  if vim.fn.pumvisible() == 1 then
+      return "<C-p>"
+  elseif luasnip and luasnip.jumpable(-1) then
+      return "<Plug>luasnip-jump-prev"
+  else
+      return "<S-Tab>"
+  end
+end
+
+mapper.map("i", "<Tab>", bridge(tab_complete, "expr"),
+  {noremap = true, expr = true},
+  "Autocomplete", "autocomplete_i_tab", "Tab key for auto complete.")
+mapper.map("s", "<Tab>", bridge(tab_complete, "expr"),
+  {noremap = true, expr = true},
+  "Autocomplete", "autocomplete_s_tab", "Tab key for auto complete.")
+mapper.map("i", "<S-Tab>", bridge(s_tab_complete, "expr"),
+  {noremap = true, expr = true}, "Autocomplete", "autocomplete_i_shift_tab",
+  "Shift-tab key for auto complete.")
+mapper.map("s", "<S-Tab>", bridge(s_tab_complete, "expr"),
+  {noremap = true, expr = true}, "Autocomplete", "autocomplete_s_shift_tab",
+  "Shift-tab key for auto complete.")
 
 -- Auto comfirm
--- mapper.map("i", "<CR>", "compe#confirm({ 'keys' : '<CR>', 'select' : v:true })",
---  {expr=true}, "Autocomplete", "auto_confirm", "Auto confirms.")
+mapper.map("i", "<CR>", "compe#confirm({ 'keys': '<CR>', 'select': v:true })",
+  {noremap = true, expr = true}, "Autocomplete", "autocomplete_confirm",
+  "Confirm key for auto complete.")
 
 -- telescopes
-mapper.map("n", "<leader>ff", "<cmd>Telescope find_files<CR>", {noremap = true},
+mapper.map("n", "<leader>tf", "<cmd>Telescope find_files<CR>", {noremap = true},
   "Files", "telescope_find_files", "Find files in current directory.")
 
-mapper.map("n", "<leader>fr", "<cmd>Telescope frecency<CR>", {noremap = true},
+mapper.map("n", "<leader>tr", "<cmd>Telescope frecency<CR>", {noremap = true},
   "Files", "telescope_mru", "Find recent files.")
 
-mapper.map("n", "<leader>fp", "<cmd>Telescope mapper<CR>", {noremap = true},
+mapper.map("n", "<leader>tp", "<cmd>Telescope mapper<CR>", {noremap = true},
   "Mappings", "telescope_mapper", "Show key mappings.")
 
 mapper.map("n", "gb", "<cmd>Telescope buffers<CR>", {noremap = true},
@@ -111,15 +124,15 @@ mapper.map("n", "<localleader>ll", bridge(function()
   end, "cmd_keys"), {noremap = true},
   "Conjure", "conjure_log_toggle", "Toggle conjure buffer to side.")
 
--- smalls
-mapper.map("n", "s", "<Plug>(smalls)", {},
-  "Smalls", "smalls_n", "Easymotion like find for normal mode.")
-mapper.map("x", "s", "<Plug>(smalls)", {},
-  "Smalls", "smalls_x", "Easymotion like find for visual mode.")
-mapper.map("o", "s", "<Plug>(smalls)", {},
-  "Smalls", "smalls_o", "Easymotion like find for operator mode.")
-
 -- layout
 mapper.map("c", "hv", "vert help", {noremap = true},
   "Layout", "help_on_right",
   "Display help on the right")
+
+-- lsp
+mapper.map("n", "gr", "<cmd>Telescope lsp_references<CR>", {noremap = true},
+  "LSP", "lsp_show_reference", "Show references.")
+
+-- Undo tree
+mapper.map("n", "<leader>u", "<cmd>UndotreeToggle<CR>", {noremap = true},
+  "Undo", "undo_tree_toggle", "Show undo tree")

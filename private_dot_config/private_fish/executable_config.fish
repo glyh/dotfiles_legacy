@@ -62,8 +62,6 @@ alias a="paru"
 alias h="chezmoi"
 alias rm="trash-put"
 
-zoxide init fish | source
-
 function expand-dot-to-parent-directory-path -d 'expand ... to ../.. etc'
     # Get commandline up to cursor
     set -l cmd (commandline --cut-at-cursor)

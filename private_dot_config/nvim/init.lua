@@ -1,9 +1,6 @@
-local utils = require("utils")
-local bridge = utils.bridge
+_G.GITHUB_CDN = "github.com.cnpmjs.org"
 
-nvim = utils.nvim
-ensure = utils.ensure
-augroup = utils.augroup
+require("utils") -- Injects into global scope
 
 -- Bootstrapping
 
@@ -11,29 +8,40 @@ ensure("wbthomason", "packer.nvim")
 
 -- General
 
-local lisp_file_types = "clojure,fennel"
+_G.LISP_FILE_TYPES = "clojure,fennel,janet,lisp"
+_G.LISP_FILE_TYPES_TABLE = {"clojure", "fennel", "janet", "lisp"}
 
-nvim.o.termguicolors = true
-nvim.o.mouse = "a"
-nvim.o.updatetime = 500
-nvim.o.timeoutlen = 500
-nvim.o.sessionoptions = "blank,curdir,folds,help,tabpages,winsize"
-nvim.o.completeopt = "menuone,noselect"
-nvim.o.list = true
-nvim.o.splitright = true
-nvim.o.hidden = true
-nvim.o.number = true
+nvim.opt.termguicolors = true
+nvim.opt.mouse = "a"
+nvim.opt.updatetime = 500
+nvim.opt.timeoutlen = 500
+nvim.opt.sessionoptions = "blank,curdir,folds,help,tabpages,winsize"
+nvim.opt.completeopt = "menuone,noselect"
+nvim.opt.list = true
+nvim.opt.splitright = true
+nvim.opt.hidden = true
+nvim.opt.number = true
 nvim.opt.wrap = false
+nvim.opt.lazyredraw = true
 
 -- Set up packer
 
-require("packer").startup({function()
+require("packer").startup({function(use)
 
-  ----- package manager -----
+  ----- Package Manager -----
 
   use "wbthomason/packer.nvim"
 
-  ----- ui -----
+  ----- FileType Support -----
+  use {"bakpakin/fennel.vim",
+    ft = "fennel"
+  }
+
+  use {"janet-lang/janet.vim",
+    ft = "janet"
+  }
+
+  ----- UI -----
 
   use {"itchyny/lightline.vim",
     config = function()
@@ -71,35 +79,49 @@ require("packer").startup({function()
     end
   }
 
-  ----- editing -----
+  ----- Editing -----
 
-  use "tpope/vim-surround"
+  -- use {"blackCauldron6/surround.nvim",
+  --   config = function()
+  --     require "surround".setup {}
+  --   end
+  -- }
+  use "machakann/vim-sandwich"
 
   use "wellle/targets.vim"
 
-  use {"jiangmiao/auto-pairs",
+  use {"windwp/nvim-autopairs",
     config = function()
-      augroup("auto_pair",
-        {{"filetype", lisp_file_types, function()
-          local auto_pairs = nvim.g.AutoPairs
-          auto_pairs["'"] = nil
-          auto_pairs["`"] = nil
+      local autopairs = require('nvim-autopairs')
+      autopairs.setup({
+        disable_filetype = { "TelescopePrompt" , "vim" },
+      })
+      augroup("autopairs-custom",
+        {{"FileType", LISP_FILE_TYPES, function()
+          autopairs.remove_rule('`')
+          autopairs.remove_rule("'")
         end}})
     end
   }
 
-  use {"t9md/vim-smalls",
-    config = function()
-      nvim.g.smalls_jump_keys = ";ASDFGHJKLQWERTYUIOP"
-    end}
+  -- use {"t9md/vim-smalls",
+  --   config = function()
+  --     nvim.g.smalls_jump_keys = ";ASDFGHJKLQWERTYUIOP"
+  --   end}
 
+  use {"eraserhd/parinfer-rust",
+    ft = LISP_FILE_TYPES_TABLE,
+    run = "cargo build --release",
+  }
   use {"guns/vim-sexp",
+    ft = LISP_FILE_TYPES_TABLE,
     config = function()
-      nvim.g.sexp_filetypes = lisp_file_types
+      nvim.g.sexp_filetypes = LISP_FILE_TYPES
     end
   }
 
   use {"tpope/vim-sexp-mappings-for-regular-people",
+    ft = LISP_FILE_TYPES_TABLE,
     requires = "guns/vim-sexp",
   }
 
@@ -113,24 +135,22 @@ require("packer").startup({function()
 
   use "tpope/vim-repeat"
 
-  ----- tools -----
+  ----- Tools -----
 
   use {"Olical/conjure",
+    ft = LISP_FILE_TYPES_TABLE,
     config = function()
       nvim.g["conjure#log#hud#border"] = "none"
-      nvim.g["conjure#filetypes"] = lisp_file_types
-      -- nvim.g["conjure#filetypes_non_lisp"] = {"lua"}
-      -- nvim.g["conjure#filetype#lua"] = "conjure.client.lua.neovim"
-      -- nvim.g["conjure#filetype_suffixes#lua"] = {"lua"}
+      nvim.g["conjure#filetypes"] = LISP_FILE_TYPES
+      -- -- nvim.g["conjure#filetypes_non_lisp"] = {"lua"}
+      -- -- nvim.g["conjure#filetype#lua"] = "conjure.client.lua.neovim"
+      -- -- nvim.g["conjure#filetype_suffixes#lua"] = {"lua"}
       nvim.g["conjure#client#fennel#aniseed#aniseed_module_prefix"] = "aniseed."
     end
   }
 
-  use {
-    'lewis6991/gitsigns.nvim',
-    requires = {
-      'nvim-lua/plenary.nvim'
-    },
+  use { 'lewis6991/gitsigns.nvim',
+    requires = 'nvim-lua/plenary.nvim',
     config = function()
       require('gitsigns').setup()
     end
@@ -149,11 +169,10 @@ require("packer").startup({function()
         },
         extensions = {
           fzf = {
-            fuzzy = true,                    -- false will only do exact matching
-            override_generic_sorter = true, -- override the generic sorter
-            override_file_sorter = true,     -- override the file sorter
-            case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
-                                             -- the default case_mode is "smart_case"
+            fuzzy = true,
+            override_generic_sorter = true,
+            override_file_sorter = true,
+            case_mode = "smart_case"
           }
         }
       })
@@ -167,25 +186,51 @@ require("packer").startup({function()
     run = 'make'
   }
   use { "lazytanuki/nvim-mapper",
-    requires = "nvim-telescope/telescope.nvim",
     before = "nvim-telescope/telescope.nvim",
-    config = function() require("nvim-mapper").setup{} end
+    config = function() require("nvim-mapper").setup({}) end
   }
 
-  use { "Shougo/deoplete.nvim",
-    run = {"UpdateRemotePlugins"},
+  use {"hrsh7th/nvim-compe",
+    event = "InsertEnter",
     config = function()
-      nvim.g["deoplete#enable_at_startup"] = 1
-      nvim.fn["deoplete#custom#option"]('keyword_patterns', {
-        clojure= "[\\w!$%&*+/:<=>?@\\^_~\\-\\.#]*"
-      })
-      nvim.cmd([[
-        autocmd FileType TelescopePrompt call deoplete#custom#buffer_option('auto_complete', v:false)
-      ]])
+      require'compe'.setup {
+        enabled = true;
+        autocomplete = true;
+        debug = false;
+        min_length = 1;
+        preselect = 'enable';
+        throttle_time = 80;
+        source_timeout = 200;
+        resolve_timeout = 800;
+        incomplete_delay = 400;
+        max_abbr_width = 100;
+        max_kind_width = 100;
+        max_menu_width = 100;
+        documentation = {
+          border = { '', '' ,'', ' ', '', '', '', ' ' },
+          winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
+          max_width = 120,
+          min_width = 60,
+          max_height = math.floor(vim.o.lines * 0.3),
+          min_height = 1,
+        };
+
+        source = {
+          path = true,
+          buffer = true,
+          nvim_lsp = true,
+          nvim_lua = true,
+          luasnip = true,
+          conjure = true
+        };
+      }
+
     end
   }
-  use { "deoplete-plugins/deoplete-lsp",
-    requires = "Shougo/deoplete.nvim"
+
+  use {"tami5/compe-conjure",
+    ft = LISP_FILE_TYPES_TABLE,
+    requires = {"hrsh-8th/nvim-compe", "Olical/conjure"},
   }
 
   use {"dense-analysis/ale",
@@ -199,7 +244,7 @@ require("packer").startup({function()
           ["ale_fixers"] = {}
         }
       }
-      nvim.g.ale_disable_lsp = 1 -- We already have neovim's built in lsp
+      nvim.g.ale_disable_lsp = 1 -- use neovim's built-in LSP client
     end
   }
 
@@ -220,28 +265,64 @@ require("packer").startup({function()
       lspconfig.clojure_lsp.setup{
           cmd = { "clojure-lsp" },
           filetypes = { "clojure", "edn" },
-          root_dir =
-            lsputil.root_pattern("project.clj", "deps.edn", ".git", "build.boot"),
+          root_dir = lsputil.root_pattern(
+            "project.clj", "deps.edn", ".git", "build.boot"),
+          capabilities = capabilities
       }
-      lspconfig.clangd.setup{ }
-      lspconfig.rust_analyzer.setup{  }
+      lspconfig.clangd.setup{
+        capabilities = capabilities
+      }
+      lspconfig.rust_analyzer.setup{
+        capabilities = capabilities
+      }
+      local runtime_path = vim.split(package.path, ';')
+      table.insert(runtime_path, "lua/?.lua")
+      table.insert(runtime_path, "lua/?/init.lua")
+
+      lspconfig.sumneko_lua.setup {
+        cmd = {"lua-language-server"},
+        settings = {
+          Lua = {
+            runtime = {
+              version = 'LuaJIT',
+              path = runtime_path,
+            },
+            diagnostics = {
+              globals = {'vim'},
+            },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true),
+            },
+            telemetry = {
+              enable = false,
+            },
+          },
+        },
+      }
+      -- TODO: Config diagnosticls
+      -- lspconfig.diagnosticls.setup({
+      --   filetypes={'*'},
+      -- })
     end
   }
 
+  -- Difference between requires & requires
+  -- https://www.reddit.com/r/neovim/comments/opipij/guide_tips_and_tricks_to_reduce_startup_and/h67au5f?utm_source=share&utm_medium=web2x&context=3
   use { "nvim-telescope/telescope-frecency.nvim",
-    requires = {"nvim-telescope/telescope.nvim", "tami5/sql.nvim"}
+    requires = {"tami5/sql.nvim", "nvim-telescope/telescope.nvim"}
   }
 
   use { "nvim-treesitter/nvim-treesitter",
-    run = "TSUpdate",
+    run = ":TSUpdate",
     config = function()
-      for _, p in pairs(require("nvim-treesitter.parsers").get_parser_configs()) do
-        p.install_info.url = p.install_info.url:gsub("github.com", "hub.fastgit.org")
-      end
+      -- for _, p in pairs(require("nvim-treesitter.parsers").get_parser_configs()) do
+      --   p.install_info.url = p.install_info.url:gsub("github.com", GITHUB_CDN)
+      -- end
 
       require("nvim-treesitter.configs").setup({
         ensure_installed =
-        {"clojure", "fish", "c", "cpp", "rust", "query", "lua", "python", "fennel"},
+        {"clojure", "fish", "c", "cpp", "rust", "query", "lua", "python",
+         "fennel"},
         highlight = {
           enable = true,
           additional_vim_regex_highlighting = false
@@ -258,8 +339,7 @@ require("packer").startup({function()
           enable = true,
           disable = {},
           updatetime = 25,
-          -- debounced time for highlighting nodes in the playground from source code
-          persist_queries = false, -- whether the query persists across vim sessions
+          persist_queries = false,
           keybindings = {
             toggle_query_editor = 'o',
             toggle_hl_groups = 'i',
@@ -276,10 +356,7 @@ require("packer").startup({function()
         textobjects = {
           select = {
             enable = true,
-
-            -- automatically jump forward to textobj, similar to targets.vim
             lookahead = true,
-
             keymaps = {
               ["af"] = "@function.outer",
               ["if"] = "@function.inner",
@@ -292,23 +369,18 @@ require("packer").startup({function()
     end
   }
   use { "nvim-treesitter/playground",
-    requires = {"nvim-treesitter/nvim-treesitter"}
+    requires = "nvim-treesitter/nvim-treesitter"
   }
   use {"nvim-treesitter/nvim-treesitter-textobjects",
-    requires = {"nvim-treesitter/nvim-treesitter"}
+    requires = "nvim-treesitter/nvim-treesitter"
   }
 
-  -- language specific
-  use "bakpakin/fennel.vim"
+  use "L3MON4D3/LuaSnip"
 
-  use "janet-lang/janet.vim"
-
-  use { "deoplete-plugins/deoplete-clang",
-    requires = "shougo/deoplete.nvim"
-  }
+  use "mbbill/undotree"
 
 end,config = {
-  git = {default_url_format = "https://hub.fastgit.org/%s"}
+  git = {default_url_format = "https://" .. GITHUB_CDN .. "/%s"}
 }})
 
 require("mappings")

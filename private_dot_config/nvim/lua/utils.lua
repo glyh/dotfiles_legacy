@@ -1,8 +1,6 @@
-local utils = {}
-
-utils.nvim = setmetatable({
+_G.nvim = setmetatable({
     api = setmetatable({}, {
-      __index = function(t, k)
+      __index = function(_, k)
         return vim.api["nvim_" .. k]
       end
     }),
@@ -24,14 +22,14 @@ utils.nvim = setmetatable({
     end
   })
 
-function utils.bridge(f, category)
-  if bridge_id == nil then
-    bridge_id = 1
+function _G.bridge(f, category)
+  if BRIDGE_ID == nil then
+    BRIDGE_ID = 1
   else
-    bridge_id = bridge_id + 1
+    BRIDGE_ID = BRIDGE_ID + 1
   end
-  local id_gen = "lua_bridge_function" .. bridge_id
-  local result = result
+  local id_gen = "lua_bridge_function" .. BRIDGE_ID
+  local result
 
   if category == "expr" then
     local f_origin = f
@@ -47,8 +45,8 @@ function utils.bridge(f, category)
     nvim.cmd.exec(string.format([[ function! VimFunctionBridge%d(...)
       " Passing on varargs
       return luaeval("%s(unpack(_A))", a:000)
-    endfunction ]], bridge_id, id_gen), true)
-    result = "VimFunctionBridge" .. bridge_id
+    endfunction ]], BRIDGE_ID, id_gen), true)
+    result = "VimFunctionBridge" .. BRIDGE_ID
   elseif category == "op" then
     nvim.cmd(string.format([[ function!VimFunctionBridge%d(type = '')
       if a:type == ''
@@ -56,19 +54,19 @@ function utils.bridge(f, category)
         return 'g@'
       end
       return luaeval("%s(_A[1])", [a:type])
-    endfunction ]], bridge_id, bridge_id, id_gen))
-    result = "VimFunctionBridge" .. bridge_id .. "()"
+    endfunction ]], BRIDGE_ID, BRIDGE_ID, id_gen))
+    result = "VimFunctionBridge" .. BRIDGE_ID .. "()"
   end
   _G[id_gen] = f
   return result
 end
 
-function utils.augroup(group_name, definition)
+function _G.augroup(group_name, definition)
   nvim.api.command("augroup " .. group_name)
   nvim.api.command("autocmd!")
   for _, def in ipairs(definition) do
     if type(def) == "table" and type(def[#def]) == "function" then
-      def[#def] = utils.bridge(def[#def], "cmd")
+      def[#def] = bridge(def[#def], "cmd")
     end
     local command = table.concat(nvim.tbl_flatten{"autocmd", def}, " ")
     nvim.api.command(command)
@@ -78,18 +76,21 @@ end
 
 -- Bootstrapping
 
-local pack_path = utils.nvim.fn.stdpath("data") .. "/site/pack"
+local pack_path = nvim.fn.stdpath("data") .. "/site/pack"
 
-function utils.ensure(user, repo)
+function _G.ensure(user, repo)
   -- Ensures a given github.com/user/repo is cloned in the
   -- Pack/packer/start directory.
   local install_path =
   string.format("%s/packer/start/%s", pack_path, repo, repo)
   if nvim.fn.empty(nvim.fn.glob(install_path)) > 0 then
-    nvim.cmd(string.format("!git clone https://hub.fastgit.org/%s/%s %s",
+    nvim.cmd(string.format("!git clone https://" .. _G.GITHUB_CDN .. "/%s/%s %s",
     user, repo, install_path))
     nvim.cmd(string.format("packadd %s", repo))
   end
 end
 
-return utils
+function _G.prequire(name)
+  local ok, module = pcall(require, name)
+  return ok and module or nil
+end
