@@ -401,7 +401,7 @@ font:
 #   - (Linux/BSD) user login shell
 #   - (Windows) powershell
 shell:
-  program: /usr/bin/fish
+  program: /usr/bin/xonsh
 
 # Startup directory
 #

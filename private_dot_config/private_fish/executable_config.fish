@@ -70,25 +70,25 @@ alias te="trash-empty"
 #     end
 # end
 
-function bind_bang
-    switch (commandline -t)[-1]
-        case "!"
-            commandline -t $history[1]; commandline -f repaint
-        case "*"
-            commandline -i !
-    end
-end
-
-function bind_dollar
-    switch (commandline -t)[-1]
-        case "!"
-            commandline -t ""
-            commandline -f history-token-search-backward
-        case "*"
-            commandline -i '$'
-    end
-end
+# function bind_bang
+#     switch (commandline -t)[-1]
+#         case "!"
+#             commandline -t $history[1]; commandline -f repaint
+#         case "*"
+#             commandline -i !
+#     end
+# end
+#
+# function bind_dollar
+#     switch (commandline -t)[-1]
+#         case "!"
+#             commandline -t ""
+#             commandline -f history-token-search-backward
+#         case "*"
+#             commandline -i '$'
+#     end
+# end
 
 # bind . 'expand-dot-to-parent-directory-path'
-bind ! bind_bang
-bind '$' bind_dollar
+# bind ! bind_bang
+# bind '$' bind_dollar
