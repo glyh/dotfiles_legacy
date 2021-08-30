@@ -4,7 +4,7 @@ from xonsh.tools import EnvPath
 
 xontrib load coreutils onepath z
 $VI_MODE = True
-$PROMPT = '{BLUE}{cwd} {curr_branch}\n{PURPLE}❯ '
+$PROMPT = '{BLUE}{cwd} {branch_color}{curr_branch}\n{PURPLE}❯ '
 
 $PATH += ['~/.local/bin',
           '~/.yarn/bin',
