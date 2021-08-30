@@ -1,5 +1,46 @@
-# XONSH WEBCONFIG START
-$PROMPT = '{env_name}{BOLD_GREEN}{user}@{hostname}{BOLD_BLUE} {cwd}{branch_color}{curr_branch: {}}{RESET} {BOLD_BLUE}{prompt_end}{RESET} '
+from re import finditer
+from os import getcwd, path, chdir
+from xonsh.tools import EnvPath
+
 xontrib load coreutils onepath z
-# XONSH WEBCONFIG END
 $VI_MODE = True
+$PROMPT = '{BLUE}{cwd} {curr_branch}\n{PURPLE}❯ '
+
+$PATH += ['~/.local/bin',
+          '~/.yarn/bin',
+	  '~/usr/lib/jvm/default/bin']
+$CLASSPATH = ['.', '/usr/bin/share/java/antlr-complete.jar']
+$VISUAL = 'nvim'
+$EDITOR = 'nvim'
+$MANPAGER = 'page'
+
+for m in finditer(r"export ([A-Z_]+)='([^']*)'", $(luarocks path)):
+    env_var = m.group(1)
+    if env_var == 'PATH':
+        ${env_var} = EnvPath(m.group(2))
+    else:
+        ${env_var} = m.group(2)
+
+def edit_neovim_config():
+    wd = getcwd()
+    chdir(path.expanduser('~/.config/nvim'))
+    nvim init.lua
+    chdir(wd)
+
+aliases['e'] = 'nvim'
+aliases['en'] = 'nvim -u NONE'
+aliases['er'] = 'sudoedit'
+aliases['ec'] = edit_neovim_config
+aliases['g'] = 'git'
+aliases['l'] = aliases['ls']
+aliases['c'] = 'cd'
+aliases['i'] = 'sudo light'
+aliases['p'] = 'proxychains'
+aliases['pg'] = 'proxychains git'
+aliases['pa'] = 'proxychains paru'
+aliases['a'] = 'paru'
+aliases['h'] = 'chezmoi'
+aliases['rm'] = 'rm -i'
+aliases['tp'] = 'trash-put'
+aliases['tl'] = 'trash-list'
+aliases['te'] = 'trash-empty'

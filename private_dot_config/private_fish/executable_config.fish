@@ -8,7 +8,7 @@ set -gxa PATH                /usr/lib/jvm/default/bin
 set -gx  XDG_CONFIG_HOME     ~/.config
 set -gx  XDG_USER_CONFIG_DIR ~/.config
 #set -gx  JAVA_HOME           /usr/lib/jvm/default
-#set -gx  CLASSPATH           ".:/usr/share/java/jflex/jflex.jar:/usr/share/java/antlr-complete.jar:$CLASSPATH"
+set -gx  CLASSPATH           ".:/usr/share/java/antlr-complete.jar:$CLASSPATH"
 #set -gx  BOOT_JVM_OPTIONS    "--add-modules java.xml.bind"
 #set -gx  CARP_DIR ~/.carp
 set -gx  VISUAL              nvim
@@ -57,38 +57,3 @@ alias rm="rm -i"
 alias tp="trash-put"
 alias tl="trash-list"
 alias te="trash-empty"
-
-# function expand-dot-to-parent-directory-path -d 'expand ... to ../.. etc'
-#     # Get commandline up to cursor
-#     set -l cmd (commandline --cut-at-cursor)
-#     # Match last line
-#     switch $cmd[-1]
-#         case '*..'
-#             commandline --insert '/..'
-#         case '*'
-#             commandline --insert '.'
-#     end
-# end
-
-# function bind_bang
-#     switch (commandline -t)[-1]
-#         case "!"
-#             commandline -t $history[1]; commandline -f repaint
-#         case "*"
-#             commandline -i !
-#     end
-# end
-#
-# function bind_dollar
-#     switch (commandline -t)[-1]
-#         case "!"
-#             commandline -t ""
-#             commandline -f history-token-search-backward
-#         case "*"
-#             commandline -i '$'
-#     end
-# end
-
-# bind . 'expand-dot-to-parent-directory-path'
-# bind ! bind_bang
-# bind '$' bind_dollar
