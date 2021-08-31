@@ -9,7 +9,7 @@ $PROMPT = '{BLUE}{cwd} {branch_color}{curr_branch}\n{PURPLE}❯ '
 $PATH += ['~/.local/bin',
           '~/.yarn/bin',
 	  '~/usr/lib/jvm/default/bin']
-$CLASSPATH = ['.', '/usr/bin/share/java/antlr-complete.jar']
+$CLASSPATH = ['.', '/usr/share/java/antlr-complete.jar']
 $VISUAL = 'nvim'
 $EDITOR = 'nvim'
 $MANPAGER = 'page'
