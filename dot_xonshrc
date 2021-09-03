@@ -1,5 +1,5 @@
 from re import finditer
-from os import getcwd, path, chdir
+from os import getcwd, path, chdir, getpid
 from xonsh.tools import EnvPath
 
 xontrib load coreutils onepath z
@@ -27,13 +27,24 @@ def edit_neovim_config():
     nvim init.lua
     chdir(wd)
 
+def ranger():
+    path = "/tmp/rangerdir_" + str(getpid())
+    ranger --choosedir=@(path)
+    with open(path) as f:
+        cd @(f.readline())
+
+
 aliases['e'] = 'nvim'
 aliases['en'] = 'nvim -u NONE'
 aliases['er'] = 'sudoedit'
-aliases['ec'] = edit_neovim_config
+#aliases['ec'] = edit_neovim_config
+#aliases['ex'] = 'nvim ~/.xonshrc'
+#aliases['es'] = 'nvim ~/.config/sway/config'
 aliases['g'] = 'git'
 aliases['l'] = aliases['ls']
+aliases['la'] = 'ls --color=auto -vla'
 aliases['c'] = 'cd'
+aliases['f'] = ranger
 aliases['i'] = 'sudo light'
 aliases['p'] = 'proxychains'
 aliases['pg'] = 'proxychains git'

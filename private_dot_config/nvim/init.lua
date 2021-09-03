@@ -273,8 +273,15 @@ require('packer').startup({function(use)
 
   use 'mbbill/undotree'
 
+  use {'voldikss/vim-translator',
+    config = function()
+      vim.api.nvim_set_keymap("n", "t", "<Plug>TranslateW", {})
+      vim.api.nvim_set_keymap("v", "t", "<Plug>TranslateWV", {})
+    end
+  }
+
 end,config = {
-  git = {default_url_format = 'https://' .. GITHUB_CDN .. '/%s'}
+  git = { default_url_format = 'https://' .. GITHUB_CDN .. '/%s' }
 }})
 
 require('mappings')
