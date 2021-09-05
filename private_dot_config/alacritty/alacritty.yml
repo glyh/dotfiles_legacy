@@ -400,8 +400,8 @@ font:
 #   - (macOS) /bin/bash --login
 #   - (Linux/BSD) user login shell
 #   - (Windows) powershell
-shell:
-  program: /usr/bin/xonsh
+#shell:
+#  program: /usr/bin/xonsh
 
 # Startup directory
 #
