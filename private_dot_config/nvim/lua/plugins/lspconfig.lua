@@ -56,4 +56,6 @@ return function()
   lspconfig.java_language_server.setup{
     capabilities = capabilities
   }
+
+  lspconfig.nimls.setup { }
 end

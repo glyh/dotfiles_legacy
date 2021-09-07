@@ -1,4 +1,4 @@
-_G.GITHUB_CDN = 'github.com.cnpmjs.org'
+_G.GITHUB_CDN = 'hub.fastgit.org' --'github.com.cnpmjs.org'
 
 require('utils') -- Injects into global scope
 
@@ -25,6 +25,8 @@ nvim.opt.hidden = true
 nvim.opt.number = true
 nvim.opt.wrap = false
 nvim.opt.lazyredraw = true
+nvim.opt.expandtab = true
+nvim.opt.shiftwidth = 4
 
 -- Set up packer
 
@@ -47,6 +49,10 @@ require('packer').startup({function(use)
 
   use {'janet-lang/janet.vim',
     ft = 'janet'
+  }
+
+  use {'zah/nim.vim',
+    ft = 'nim'
   }
 
   use {'vhyrro/neorg',
@@ -102,13 +108,13 @@ require('packer').startup({function(use)
     end
   }
 
-  use {'ncm2/float-preview.nvim',
-    config = function()
-      nvim.g['float_preview#docked'] = false
-      nvim.g['float_preview#max_width'] = 80
-      nvim.g['float_preview#max_height'] = 40
-    end
-  }
+  -- use {'ncm2/float-preview.nvim',
+  --   config = function()
+  --     nvim.g['float_preview#docked'] = false
+  --     nvim.g['float_preview#max_width'] = 80
+  --     nvim.g['float_preview#max_height'] = 40
+  --   end
+  -- }
 
   use {'folke/todo-comments.nvim',
     config = function ()
@@ -130,6 +136,8 @@ require('packer').startup({function(use)
       }
     end
   }
+
+  use 'Yggdroot/indentLine'
 
   ----- Editing -----
 
