@@ -36,16 +36,11 @@ require('packer').startup({function(use)
 
   use 'wbthomason/packer.nvim'
 
-  ----- Speed up -----
-
-  --use 'lewis6991/impatient.nvim'
-  --use {'lewis6991/impatient.nvim', rocks = 'mpack'}
-
   ----- FileType Support -----
 
-  use {'bakpakin/fennel.vim',
-    ft = 'fennel'
-  }
+  -- use {'bakpakin/fennel.vim',
+  --   ft = 'fennel'
+  -- }
 
   use {'janet-lang/janet.vim',
     ft = 'janet'
@@ -55,7 +50,7 @@ require('packer').startup({function(use)
     ft = 'nim'
   }
 
-  use {'vhyrro/neorg',
+  use {'nvim-neorg/neorg',
     ft = 'norg',
     config = function()
       require('neorg').setup({
@@ -108,13 +103,12 @@ require('packer').startup({function(use)
     end
   }
 
-  -- use {'ncm2/float-preview.nvim',
-  --   config = function()
-  --     nvim.g['float_preview#docked'] = false
-  --     nvim.g['float_preview#max_width'] = 80
-  --     nvim.g['float_preview#max_height'] = 40
-  --   end
-  -- }
+  use { 'lewis6991/gitsigns.nvim',
+    requires = 'nvim-lua/plenary.nvim',
+    config = function()
+      require('gitsigns').setup()
+    end
+  }
 
   use {'folke/todo-comments.nvim',
     config = function ()
@@ -137,7 +131,14 @@ require('packer').startup({function(use)
     end
   }
 
-  use 'Yggdroot/indentLine'
+  use {'lukas-reineke/indent-blankline.nvim',
+    config = function ()
+      require('indent_blankline').setup {
+        char = '|',
+        buftype_exclude = {'terminal'}
+      }
+    end
+  }
 
   ----- Editing -----
 
@@ -202,11 +203,7 @@ require('packer').startup({function(use)
     end
   }
 
-  use { 'lewis6991/gitsigns.nvim',
-    requires = 'nvim-lua/plenary.nvim',
-    config = function()
-      require('gitsigns').setup()
-    end
+  use {'mfussenegger/nvim-dap',
   }
 
   use { 'nvim-telescope/telescope.nvim',
@@ -275,6 +272,16 @@ require('packer').startup({function(use)
   }
   use {'nvim-treesitter/nvim-treesitter-textobjects',
     requires = 'nvim-treesitter/nvim-treesitter'
+  }
+
+  use {'romgrk/nvim-treesitter-context',
+    requires = 'nvim-treesitter/nvim-treesitter',
+    config = function ()
+    require('treesitter-context').setup({
+      enable = true,
+      throttle = true,
+    })
+    end
   }
 
   use 'L3MON4D3/LuaSnip'

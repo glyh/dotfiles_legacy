@@ -8,6 +8,14 @@ return function()
       branch = 'main'
     },
   }
+  -- parser_configs.nim = {
+  --   install_info = {
+  --     url = '/tmp/tree-sitter-nim',
+  --     files = { 'src/parser.c' },
+  --     branch = 'master'
+  --   }
+  -- }
+
   for _, p in pairs(require('nvim-treesitter.parsers').get_parser_configs()) do
     p.install_info.url = p.install_info.url:gsub('github.com', GITHUB_CDN)
   end
@@ -15,7 +23,7 @@ return function()
   require('nvim-treesitter.configs').setup({
     ensure_installed = {
       'clojure', 'fish', 'c', 'cpp', 'rust', 'query', 'lua', 'python',
-      'zig', 'norg'
+      'zig', 'norg' --, 'nim'
     },
     highlight = {
       enable = true,

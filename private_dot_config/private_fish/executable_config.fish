@@ -8,7 +8,7 @@ set -gxa PATH                /usr/lib/jvm/default/bin
 set -gx  XDG_CONFIG_HOME     ~/.config
 set -gx  XDG_USER_CONFIG_DIR ~/.config
 #set -gx  JAVA_HOME           /usr/lib/jvm/default
-set -gx  CLASSPATH           ".:/usr/share/java/antlr-complete.jar:$CLASSPATH"
+#set -gx  CLASSPATH           ".:/usr/share/java/antlr-complete.jar:$CLASSPATH"
 #set -gx  BOOT_JVM_OPTIONS    "--add-modules java.xml.bind"
 #set -gx  CARP_DIR ~/.carp
 set -gx  VISUAL              nvim
@@ -58,3 +58,6 @@ alias tp="trash-put"
 alias tl="trash-list"
 alias te="trash-empty"
 alias tr="trash-restore"
+
+alias ccljs="create-cljs-project"
+alias cljs="shadow-cljs"
