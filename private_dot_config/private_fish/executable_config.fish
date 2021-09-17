@@ -57,7 +57,7 @@ alias rm="rm -i"
 alias tp="trash-put"
 alias tl="trash-list"
 alias te="trash-empty"
-alias tr="trash-restore"
+alias rt="trash-restore"
 
 alias ccljs="create-cljs-project"
 alias cljs="shadow-cljs"
