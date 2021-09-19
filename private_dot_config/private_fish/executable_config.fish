@@ -13,12 +13,12 @@ set -gx  XDG_USER_CONFIG_DIR ~/.config
 #set -gx  CARP_DIR ~/.carp
 set -gx  VISUAL              nvim
 set -gx  EDITOR              nvim
-set -gx  PAGER               "page"
+set -gx  PAGER               page
 
 
-for i in (luarocks path | awk '{sub(/PATH=/, "PATH ", $2); print "set -gx "$2}')
-    eval $i
-end
+# for i in (luarocks path | awk '{sub(/PATH=/, "PATH ", $2); print "set -gx "$2}')
+#     eval $i
+# end
 
 # Editor
 

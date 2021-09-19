@@ -1,4 +1,4 @@
-no-unlock-indicator
+indicator-radius=30
 ignore-empty-password
-image=~/.config/wallpapers/simple.jpg
+image=~/.config/wallpapers/blackonly.jpg
 font=FiraMono Nerd Font

@@ -24,7 +24,7 @@ set $term alacritty
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg ~/.config/wallpapers/simple.jpg fill
+output * bg ~/.config/wallpapers/blackonly.jpg fill
 #
 # Example configuration:
 #
@@ -278,7 +278,7 @@ bindsym $mod+r mode "resize"
 
 include /etc/sway/config.d/*
 
-exec autotiling
+exec autotiling &
 exec aria2c -D
 #exec dbus-launch --exit-with-session fcitx5
 #exec_always fcitx5 -d --replace
