@@ -6,7 +6,7 @@ require('utils') -- Injects into global scope
 
 ensure('wbthomason', 'packer.nvim')
 -- Speed up lua
--- require('impatient')
+prequire('impatient')
 
 -- General
 
@@ -35,6 +35,9 @@ require('packer').startup({function(use)
   ----- Package Manager -----
 
   use 'wbthomason/packer.nvim'
+
+  ----- Profiling -----
+  use 'lewis6991/impatient.nvim'
 
   ----- FileType Support -----
 
