@@ -76,6 +76,8 @@ require('packer').startup({function(use)
     requires = 'nvim-lua/plenary.nvim'
   }
 
+  use {'lervag/vimtex'}
+
   ----- UI -----
 
   use {'itchyny/lightline.vim',

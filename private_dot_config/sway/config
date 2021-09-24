@@ -113,7 +113,8 @@ mode "nag" {
     bindsym $mod+q kill
 
     # Start your launcher
-    bindsym $mod+d exec rofi -no-lazy-grab -show drun -modi drun
+    #bindsym $mod+d exec rofi -no-lazy-grab -show drun -modi drun
+    bindsym $mod+d exec ulauncher-toggle
     #| xargs swaymsg exec --
 
     # Drag floating windows by holding down $mod and left mouse button.
@@ -257,6 +258,7 @@ bindsym $mod+r mode "resize"
 
 #for_window [app_id="Google-chrome"] border none
 
+for_window [app_id="ulauncher"] border none
 #
 # Status Bar:
 #
@@ -284,8 +286,9 @@ exec aria2c -D
 #exec_always fcitx5 -d --replace
 #exec ibus-daemon --xim --daemonize -r
 #exec udiskie -a & # This is dangerous
-exec redshift -l 39:116 &
+exec gammastep &
 #exec brightnessctl s 100
 #exec qv2ray &
 #exec fusuma &
 exec waybar &
+exec ulauncher &
