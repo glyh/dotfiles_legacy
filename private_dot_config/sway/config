@@ -291,4 +291,4 @@ exec gammastep &
 #exec qv2ray &
 #exec fusuma &
 exec waybar &
-exec ulauncher &
+exec ulauncher --hide-window 1 &
