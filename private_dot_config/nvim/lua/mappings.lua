@@ -111,19 +111,19 @@ mapper.map('n', '<leader>pu', '<cmd>PackerSync<CR>', {noremap = true},
 mapper.map('n', '<leader>ps', '<cmd>PackerStatus<CR>', {noremap = true},
   'Plugins', 'packer_status', 'Show plugin status.')
 
--- conjure
-mapper.map('n', '<localleader>ll', bridge(function()
-    local re = nvim.regex('conjure-log-[0-9]\\+\\.[a-z]\\+$')
-    for _, win in ipairs(nvim.api.tabpage_list_wins(0)) do
-      if re:match_str(nvim.api.buf_get_name(nvim.api.win_get_buf(win)))
-        and nvim.api.win_get_config(win).focusable then
-        nvim.cmd('ConjureLogCloseVisible')
-        return
-      end
-    end
-    nvim.cmd('ConjureLogVSplit')
-  end, 'cmd_keys'), {noremap = true},
-  'Conjure', 'conjure_log_toggle', 'Toggle conjure buffer to side.')
+-- -- conjure
+-- mapper.map('n', '<localleader>ll', bridge(function()
+--     local re = nvim.regex('conjure-log-[0-9]\\+\\.[a-z]\\+$')
+--     for _, win in ipairs(nvim.api.tabpage_list_wins(0)) do
+--       if re:match_str(nvim.api.buf_get_name(nvim.api.win_get_buf(win)))
+--         and nvim.api.win_get_config(win).focusable then
+--         nvim.cmd('ConjureLogCloseVisible')
+--         return
+--       end
+--     end
+--     nvim.cmd('ConjureLogVSplit')
+--   end, 'cmd_keys'), {noremap = true},
+--   'Conjure', 'conjure_log_toggle', 'Toggle conjure buffer to side.')
 
 -- layout
 mapper.map('c', 'hv', 'vert help', {noremap = true},

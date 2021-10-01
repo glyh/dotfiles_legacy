@@ -76,7 +76,14 @@ require('packer').startup({function(use)
     requires = 'nvim-lua/plenary.nvim'
   }
 
-  use {'lervag/vimtex'}
+  use {'lervag/vimtex',
+    config = function()
+      nvim.g.vimtex_view_enabled = true
+      nvim.g.vimtex_view_method = 'zathura'
+      -- nvim.g.vimtex_view_general_viewer = "zathura"
+
+    end
+  }
 
   ----- UI -----
 
