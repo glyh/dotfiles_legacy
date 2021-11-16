@@ -48,6 +48,7 @@ alias g="git"
 alias l="ls"
 alias c="cd"
 alias i="sudo light"
+alias i100 "sudo light -S 100"
 alias p="proxychains"
 alias pg="proxychains git"
 alias pa="proxychains paru"
@@ -61,3 +62,5 @@ alias rt="trash-restore"
 
 alias ccljs="create-cljs-project"
 alias cljs="shadow-cljs"
+
+#alias xournalpp="GTK_THEME=Adwaita:dark xournalpp"

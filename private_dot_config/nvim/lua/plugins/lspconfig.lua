@@ -53,9 +53,13 @@ return function()
     capabilities = capabilities
   }
 
-  lspconfig.java_language_server.setup{
+  lspconfig.kotlin_language_server.setup{
     capabilities = capabilities
   }
 
-  lspconfig.nimls.setup { }
+  -- lspconfig.java_language_server.setup{
+  --   capabilities = capabilities
+  -- }
+
+  -- lspconfig.nimls.setup { }
 end

@@ -259,6 +259,9 @@ bindsym $mod+r mode "resize"
 #for_window [app_id="Google-chrome"] border none
 
 for_window [app_id="ulauncher"] border none
+#for_window [title="Adobe Photoshop CC 2018"] border normal
+default_border pixel 2
+default_floating_border normal
 #
 # Status Bar:
 #

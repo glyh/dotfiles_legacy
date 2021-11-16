@@ -45,6 +45,10 @@ require('packer').startup({function(use)
   --   ft = 'fennel'
   -- }
 
+  use {'udalov/kotlin-vim',
+    ft = 'kotlin'
+  }
+
   use {'janet-lang/janet.vim',
     ft = 'janet'
   }
@@ -86,6 +90,17 @@ require('packer').startup({function(use)
   }
 
   ----- UI -----
+
+  -- use {
+  --   "folke/zen-mode.nvim",
+  --   config = function()
+  --     require("zen-mode").setup {
+  --       -- your configuration comes here
+  --       -- or leave it empty to use the default settings
+  --       -- refer to the configuration section below
+  --     }
+  --   end
+  -- }
 
   use {'itchyny/lightline.vim',
     config = function()
@@ -215,8 +230,8 @@ require('packer').startup({function(use)
     end
   }
 
-  use {'mfussenegger/nvim-dap',
-  }
+  -- use {'mfussenegger/nvim-dap',
+  -- }
 
   use { 'nvim-telescope/telescope.nvim',
     requires = {'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim'},
@@ -286,15 +301,15 @@ require('packer').startup({function(use)
     requires = 'nvim-treesitter/nvim-treesitter'
   }
 
-  use {'romgrk/nvim-treesitter-context',
-    requires = 'nvim-treesitter/nvim-treesitter',
-    config = function ()
-    require('treesitter-context').setup({
-      enable = true,
-      throttle = true,
-    })
-    end
-  }
+  -- use {'romgrk/nvim-treesitter-context',
+  --   requires = 'nvim-treesitter/nvim-treesitter',
+  --   config = function ()
+  --   require('treesitter-context').setup({
+  --     enable = true,
+  --     throttle = true,
+  --   })
+  --   end
+  -- }
 
   use 'L3MON4D3/LuaSnip'
 
