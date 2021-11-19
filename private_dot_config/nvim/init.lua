@@ -26,18 +26,16 @@ nvim.opt.lazyredraw = true
 nvim.opt.expandtab = true
 nvim.opt.shiftwidth = 4
 nvim.opt.guifont="Fira_Code:h18"
+nvim.opt.laststatus = 2
 
 if nvim.g.started_by_firenvim then
   nvim.opt.laststatus = 1
-
-  vim.api.nvim_exec([[
+  nvim.opt.wrap = true
+  nvim.api.exec([[
     autocmd FocusLost * ++nested write
     autocmd InsertLeave * ++nested write
     au BufRead,BufNewFile * startinsert
   ]], true)
-
-else
-  nvim.opt.laststatus = 2
 end
 
 
@@ -128,7 +126,8 @@ require('packer').startup({function(use)
         'help', 'qf', 'dirvish', 'markdown', 'tex',
         'conjure-log-[0-9]\\+\\.[a-z]\\+'
       }
-    end
+    end,
+    cond = function() return not nvim.g.started_by_firenvim end
   }
 
   use {'beauwilliams/focus.nvim',
@@ -137,14 +136,16 @@ require('packer').startup({function(use)
         enable = true,
         width = math.floor(0.6 * nvim.o.columns)
       })
-    end
+    end,
+    cond = function() return not nvim.g.started_by_firenvim end
   }
 
   use { 'lewis6991/gitsigns.nvim',
     requires = 'nvim-lua/plenary.nvim',
     config = function()
       require('gitsigns').setup()
-    end
+    end,
+    cond = function() return not nvim.g.started_by_firenvim end
   }
 
   use {'folke/todo-comments.nvim',
@@ -165,7 +166,8 @@ require('packer').startup({function(use)
             NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
           },
       }
-    end
+    end,
+    cond = function() return not nvim.g.started_by_firenvim end
   }
 
   use {'lukas-reineke/indent-blankline.nvim',
