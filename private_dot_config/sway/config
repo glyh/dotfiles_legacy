@@ -285,13 +285,8 @@ include /etc/sway/config.d/*
 
 exec autotiling &
 exec aria2c -D
-#exec dbus-launch --exit-with-session fcitx5
-#exec_always fcitx5 -d --replace
-#exec ibus-daemon --xim --daemonize -r
-#exec udiskie -a & # This is dangerous
 exec gammastep &
-#exec brightnessctl s 100
-#exec qv2ray &
-#exec fusuma &
 exec waybar &
 exec ulauncher --hide-window 1 &
+#exec fcitx5 -d --replace
+#exec ibus-daemon -drxR
