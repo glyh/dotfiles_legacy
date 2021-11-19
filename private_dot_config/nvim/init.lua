@@ -5,13 +5,11 @@ require('utils') -- Injects into global scope
 -- Bootstrapping
 
 ensure('wbthomason', 'packer.nvim')
--- Speed up lua
-prequire('impatient')
 
 -- General
 
-_G.LISP_FILE_TYPES = 'clojure,fennel,janet,lisp'
-_G.LISP_FILE_TYPES_TABLE = {'clojure', 'fennel', 'janet', 'lisp'}
+_G.LISP_FILE_TYPES = 'clojure,fennel,janet,lisp,racket,hy'
+_G.LISP_FILE_TYPES_TABLE = {'clojure', 'fennel', 'janet', 'lisp', 'racket', 'hy'}
 
 nvim.opt.termguicolors = true
 nvim.opt.mouse = 'a'
@@ -27,6 +25,22 @@ nvim.opt.wrap = false
 nvim.opt.lazyredraw = true
 nvim.opt.expandtab = true
 nvim.opt.shiftwidth = 4
+nvim.opt.guifont="Fira_Code:h18"
+
+if nvim.g.started_by_firenvim then
+  nvim.opt.laststatus = 1
+
+  vim.api.nvim_exec([[
+    autocmd FocusLost * ++nested write
+    autocmd InsertLeave * ++nested write
+    au BufRead,BufNewFile * startinsert
+  ]], true)
+
+else
+  nvim.opt.laststatus = 2
+end
+
+
 
 -- Set up packer
 
@@ -36,26 +50,23 @@ require('packer').startup({function(use)
 
   use 'wbthomason/packer.nvim'
 
-  ----- Profiling -----
-  use 'lewis6991/impatient.nvim'
-
   ----- FileType Support -----
 
   -- use {'bakpakin/fennel.vim',
   --   ft = 'fennel'
   -- }
 
-  use {'udalov/kotlin-vim',
-    ft = 'kotlin'
+  use {'hylang/vim-hy',
+     ft = 'hy'
   }
 
   use {'janet-lang/janet.vim',
     ft = 'janet'
   }
 
-  use {'zah/nim.vim',
-    ft = 'nim'
-  }
+  -- use {'zah/nim.vim',
+  --   ft = 'nim'
+  -- }
 
   use {'nvim-neorg/neorg',
     ft = 'norg',
@@ -91,26 +102,22 @@ require('packer').startup({function(use)
 
   ----- UI -----
 
-  -- use {
-  --   "folke/zen-mode.nvim",
-  --   config = function()
-  --     require("zen-mode").setup {
-  --       -- your configuration comes here
-  --       -- or leave it empty to use the default settings
-  --       -- refer to the configuration section below
-  --     }
-  --   end
-  -- }
-
   use {'itchyny/lightline.vim',
     config = function()
-      nvim.g.lightline = {colorscheme = 'iceberg'}
+      nvim.g.lightline = {colorscheme = 'nord'}
     end
   }
 
-  use {'cocopon/iceberg.vim',
+  use {'arcticicestudio/nord-vim',
     config = function()
-      nvim.cmd('colorscheme iceberg')
+      vim.api.nvim_exec([[
+        colorscheme nord
+        set nocompatible
+        if (has("termguicolors"))
+          set termguicolors
+        endif
+        syntax enable
+      ]], true)
     end
   }
 
@@ -126,7 +133,10 @@ require('packer').startup({function(use)
 
   use {'beauwilliams/focus.nvim',
     config = function()
-      require('focus').width = math.floor(0.6 * nvim.o.columns)
+      require('focus').setup({
+        enable = true,
+        width = math.floor(0.6 * nvim.o.columns)
+      })
     end
   }
 
@@ -162,7 +172,8 @@ require('packer').startup({function(use)
     config = function ()
       require('indent_blankline').setup {
         char = '|',
-        buftype_exclude = {'terminal'}
+        buftype_exclude = {'terminal'},
+        filetype_exclude = {'help', 'packer', 'markdown'}
       }
     end
   }
@@ -221,6 +232,9 @@ require('packer').startup({function(use)
 
   ----- Tools -----
 
+  use {'glacambre/firenvim',
+      run = function() vim.fn['firenvim#install'](0) end
+  }
   use {'Olical/conjure',
     ft = LISP_FILE_TYPES_TABLE,
     config = function()
@@ -269,6 +283,10 @@ require('packer').startup({function(use)
     ft = LISP_FILE_TYPES_TABLE,
     requires = {'hrsh-8th/nvim-compe', 'Olical/conjure'},
   }
+
+  -- use {'vlime/vlime',
+  --   rtp = 'vim/'
+  -- }
 
   use {'dense-analysis/ale',
     config = function()

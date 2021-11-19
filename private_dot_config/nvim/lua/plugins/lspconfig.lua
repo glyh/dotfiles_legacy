@@ -53,9 +53,18 @@ return function()
     capabilities = capabilities
   }
 
-  lspconfig.kotlin_language_server.setup{
-    capabilities = capabilities
-  }
+  -- lspconfig.kotlin_language_server.setup{
+  --   settings = {
+  --     kotlin = {
+  --       compiler = {
+  --         jvm = {
+  --           target = "1.8"
+  --         }
+  --       }
+  --     }
+  --   },
+  --   capabilities = capabilities
+  -- }
 
   -- lspconfig.java_language_server.setup{
   --   capabilities = capabilities

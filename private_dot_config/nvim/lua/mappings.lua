@@ -168,3 +168,9 @@ mapper.map('v', 'F',
 mapper.map('o', 'F',
   "<cmd>lua require('hop').hint_patterns({case_insensitive = false})<CR>", {},
   'Easymotion', 'hop_pattern_o', 'Hop.')
+
+if nvim.g.started_by_firenvim then
+  mapper.map('n', '<Tab>',
+  '<cmd>call firenvim#focus_page()<CR>' , {noremap = true},
+  'Firenvim', 'firenvim_focus_page', 'Unfocus from firenvim.')
+end

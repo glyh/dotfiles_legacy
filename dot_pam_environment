@@ -4,3 +4,5 @@
 # XMODIFIERS              DEFAULT="@im=fcitx"
 # IMSETTINGS_MODULE       DEFAULT=fcitx
 # QT_IM_MODULE            DEFAULT=fcitx
+
+MOZ_ENABLE_WAYLAND=1
