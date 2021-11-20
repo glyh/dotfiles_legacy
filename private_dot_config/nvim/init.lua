@@ -34,7 +34,6 @@ if nvim.g.started_by_firenvim then
   nvim.api.exec([[
     autocmd FocusLost * ++nested write
     autocmd InsertLeave * ++nested write
-    au BufRead,BufNewFile * startinsert
   ]], true)
 end
 

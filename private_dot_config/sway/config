@@ -290,3 +290,4 @@ exec waybar &
 exec ulauncher --hide-window 1 &
 #exec fcitx5 -d --replace
 #exec ibus-daemon -drxR
+exec mako
