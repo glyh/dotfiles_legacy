@@ -1,5 +1,7 @@
 colorscheme dark
 
+set smoothscroll true
+
 bind / fillcmdline find
 bind ? fillcmdline find -?
 bind n findnext 1
