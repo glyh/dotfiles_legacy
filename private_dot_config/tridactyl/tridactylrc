@@ -1,4 +1,4 @@
-colorscheme dark
+colors --url https://raw.fastgit.org/bezmi/base16-tridactyl/master/base16-nord.css nord
 
 set smoothscroll true
 
@@ -7,3 +7,11 @@ bind ? fillcmdline find -?
 bind n findnext 1
 bind N findnext -1
 bind ,<Space> nohlsearch
+
+bind s scrollpage 0.5
+bind d scrollpage -0.5
+bind x tabclose
+bind a hint -b
+bind m bmark
+bind h tabprev
+bind l tabnext

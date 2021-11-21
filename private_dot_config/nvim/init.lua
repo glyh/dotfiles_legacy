@@ -99,6 +99,10 @@ require('packer').startup({function(use)
 
   ----- UI -----
 
+
+  use {'ap/vim-css-color',
+    ft = {'html', 'css', 'javascript'}
+  }
   use {'itchyny/lightline.vim',
     config = function()
       nvim.g.lightline = {colorscheme = 'nord'}
