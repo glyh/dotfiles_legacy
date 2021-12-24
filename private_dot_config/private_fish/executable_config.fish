@@ -14,6 +14,8 @@ set -gx  XDG_USER_CONFIG_DIR ~/.config
 set -gx  VISUAL              nvim
 set -gx  EDITOR              nvim
 set -gx  PAGER               page
+#set -gx MANPAGER nvim +Man!
+#export MANPAGER='nvim +Man!'
 
 
 # for i in (luarocks path | awk '{sub(/PATH=/, "PATH ", $2); print "set -gx "$2}')
@@ -23,6 +25,7 @@ set -gx  PAGER               page
 # Editor
 
 alias e="nvim"
+alias h="helix"
 alias en="nvim -u NONE"
 alias er="sudoedit"
 
@@ -53,14 +56,15 @@ alias p="proxychains"
 alias pg="proxychains git"
 alias pa="proxychains paru"
 alias a="paru"
-alias h="chezmoi"
+alias ch="chezmoi"
 alias rm="rm -i"
 alias tp="trash-put"
 alias tl="trash-list"
 alias te="trash-empty"
 alias rt="trash-restore"
+alias nb="nimble"
 
-alias ccljs="create-cljs-project"
-alias cljs="shadow-cljs"
+#alias ccljs="create-cljs-project"
+#alias cljs="shadow-cljs"
 
 #alias xournalpp="GTK_THEME=Adwaita:dark xournalpp"

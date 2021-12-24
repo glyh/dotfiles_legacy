@@ -1,4 +1,4 @@
-_G.GITHUB_CDN = 'hub.fastgit.org' --'github.com.cnpmjs.org'
+_G.GITHUB_CDN =  'hub.fastgit.org' -- 'github.com.cnpmjs.org' --
 
 require('utils') -- Injects into global scope
 
@@ -9,7 +9,8 @@ ensure('wbthomason', 'packer.nvim')
 -- General
 
 _G.LISP_FILE_TYPES = 'clojure,fennel,janet,lisp,racket,hy'
-_G.LISP_FILE_TYPES_TABLE = {'clojure', 'fennel', 'janet', 'lisp', 'racket', 'hy'}
+_G.LISP_FILE_TYPES_TABLE =
+  {'clojure', 'fennel', 'janet', 'lisp', 'racket', 'hy'}
 
 nvim.opt.termguicolors = true
 nvim.opt.mouse = 'a'
@@ -53,17 +54,17 @@ require('packer').startup({function(use)
   --   ft = 'fennel'
   -- }
 
-  use {'hylang/vim-hy',
-     ft = 'hy'
-  }
-
-  use {'janet-lang/janet.vim',
-    ft = 'janet'
-  }
-
-  -- use {'zah/nim.vim',
-  --   ft = 'nim'
+  -- use {'hylang/vim-hy',
+  --    ft = 'hy'
   -- }
+
+  -- use {'janet-lang/janet.vim',
+  --   ft = 'janet'
+  -- }
+
+  use {'zah/nim.vim',
+    ft = 'nim'
+  }
 
   use {'nvim-neorg/neorg',
     ft = 'norg',
@@ -92,9 +93,11 @@ require('packer').startup({function(use)
     config = function()
       nvim.g.vimtex_view_enabled = true
       nvim.g.vimtex_view_method = 'zathura'
-      -- nvim.g.vimtex_view_general_viewer = "zathura"
-
     end
+  }
+
+  use {'lark-parser/vim-lark-syntax',
+    ft = 'lark'
   }
 
   ----- UI -----
@@ -126,22 +129,22 @@ require('packer').startup({function(use)
     config = function()
       nvim.g['lengthmatters_excluded'] = {
         'unite', 'tagbar', 'startify', 'gundo', 'vimshell', 'w3m', 'nerdtree',
-        'help', 'qf', 'dirvish', 'markdown', 'tex',
+        'help', 'qf', 'dirvish', 'markdown', 'tex', 'man',
         'conjure-log-[0-9]\\+\\.[a-z]\\+'
       }
     end,
     cond = function() return not nvim.g.started_by_firenvim end
   }
 
-  use {'beauwilliams/focus.nvim',
-    config = function()
-      require('focus').setup({
-        enable = true,
-        width = math.floor(0.6 * nvim.o.columns)
-      })
-    end,
-    cond = function() return not nvim.g.started_by_firenvim end
-  }
+  -- use {'beauwilliams/focus.nvim',
+  --   config = function()
+  --     require('focus').setup({
+  --       enable = true,
+  --       width = math.floor(0.6 * nvim.o.columns)
+  --     })
+  --   end,
+  --   cond = function() return not nvim.g.started_by_firenvim end
+  -- }
 
   use { 'lewis6991/gitsigns.nvim',
     requires = 'nvim-lua/plenary.nvim',
@@ -178,7 +181,7 @@ require('packer').startup({function(use)
       require('indent_blankline').setup {
         char = '|',
         buftype_exclude = {'terminal'},
-        filetype_exclude = {'help', 'packer', 'markdown'}
+        filetype_exclude = {'help', 'packer', 'markdown', 'man'}
       }
     end
   }
@@ -240,6 +243,11 @@ require('packer').startup({function(use)
   use {'glacambre/firenvim',
       run = function() vim.fn['firenvim#install'](0) end
   }
+
+  -- use {'subnut/nvim-ghost.nvim',
+  --   run = ':call nvim_ghost#installer#install()'
+  -- }
+
   use {'Olical/conjure',
     ft = LISP_FILE_TYPES_TABLE,
     config = function()
@@ -248,6 +256,10 @@ require('packer').startup({function(use)
       nvim.g['conjure#client#fennel#aniseed#aniseed_module_prefix'] = 'aniseed.'
     end
   }
+
+  -- use {'clojure-vim/vim-jack-in',
+  --   requires = {'tpope/vim-dispatch', 'radeling/vim-dispatch-neovim'}
+  -- }
 
   -- use {'mfussenegger/nvim-dap',
   -- }
@@ -344,6 +356,8 @@ require('packer').startup({function(use)
       vim.api.nvim_set_keymap("v", "t", "<Plug>TranslateWV", {})
     end
   }
+
+  use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
 
 end,config = {
   git = { default_url_format = 'https://' .. GITHUB_CDN .. '/%s' }

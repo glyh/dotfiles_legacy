@@ -10,7 +10,8 @@
 [difftool]
 	prompt = false
 [difftool "vimdiff"]
-	path = nvim
+	cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+	#path = nvim
 [alias]
 	l = log --oneline --decorate --graph
 	d = diff
@@ -24,3 +25,4 @@
 	p = pull
 	u = push
 	g = clone
+	b = branch

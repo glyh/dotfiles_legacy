@@ -22,8 +22,7 @@ return function()
 
   require('nvim-treesitter.configs').setup({
     ensure_installed = {
-      'clojure', 'fish', 'c', 'cpp', 'rust', 'query', 'lua', 'python',
-      'zig', 'norg' --, 'nim'
+      'c', 'cpp', 'rust', 'lua', 'python', 'norg'
     },
     highlight = {
       enable = true,

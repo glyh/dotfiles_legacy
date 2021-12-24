@@ -40,10 +40,11 @@ output eDP-1 {
 #
 # Example configuration:
 #
-exec swayidle -w \
-         timeout 600 'swaylock -f -c 000000 ; brightnessctl s 100' \
-         timeout 1200 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-         before-sleep 'swaylock -f -c 000000 ; brightnessctl s 100'
+
+# exec swayidle -w \
+#          timeout 600 'swaylock -f -c 000000 ; brightnessctl s 100' \
+#          timeout 1200 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+#          before-sleep 'swaylock -f -c 000000 ; brightnessctl s 100'
 
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
@@ -63,11 +64,15 @@ exec swayidle -w \
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
 
-   input "1267:12600:MSFT0001:00_04F3:3138_Touchpad" {
-       tap enabled
-       tap_button_map lrm
-       scroll_method edge
-   }
+input "1267:12600:MSFT0001:00_04F3:3138_Touchpad" {
+    tap enabled
+    tap_button_map lrm
+    scroll_method edge
+}
+
+input * {
+    xkb_options "caps:escape_shifted_capslock"
+}
 
 #
 # NAG
@@ -213,6 +218,9 @@ mode "nag" {
      bindsym XF86AudioLowerVolume exec pulsemixer --change-volume -10
      bindsym XF86AudioMute exec "pulsemixer --toggle-mute"
 
+     bindsym XF86MonBrightnessUp exec light -A 10
+     bindsym XF86MonBrightnessDown exec light -U 10
+
 #
 # Scratchpad:
 #
@@ -291,3 +299,5 @@ exec ulauncher --hide-window 1 &
 #exec fcitx5 -d --replace
 #exec ibus-daemon -drxR
 exec mako
+exec v2raya --lite
+#setxkbmap -option caps:escape

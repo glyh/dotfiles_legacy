@@ -70,5 +70,6 @@ return function()
   --   capabilities = capabilities
   -- }
 
-  -- lspconfig.nimls.setup { }
+  lspconfig.nimls.setup { }
+  lspconfig.pyright.setup{}
 end
