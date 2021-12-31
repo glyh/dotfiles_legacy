@@ -174,3 +174,24 @@ if nvim.g.started_by_firenvim then
   '<cmd>call firenvim#focus_page()<CR>' , {noremap = true},
   'Firenvim', 'firenvim_focus_page', 'Unfocus from firenvim.')
 end
+
+mapper.map('n', '<leader>o', '<cmd>SymbolsOutline<CR>', {},
+  'SymbolsOutline', 'symbol_outline_toggle', 'Toggle SymbolsOutline.')
+mapper.map('n', '<leader>r', '<cmd>Telescope projects<CR>', {},
+  'Project', 'telescope_project', 'Open telescope project drawer.')
+mapper.map('n', '<leader>t', '<cmd>TroubleToggle<CR>', {},
+  'Trouble', 'trouble_toggle', 'Toggle trouble.')
+
+mapper.map('n', '<localleader>ab', '<cmd>AsyncTask build<CR>', {},
+  'AsyncTask', 'asynctask_build', 'Build async task.')
+mapper.map('n', '<localleader>ar', '<cmd>AsyncTask run<CR>', {},
+  'AsyncTask', 'asynctask_run', 'Run async task.')
+mapper.map('c', '!,', 'AsyncRun ', {noremap = true},
+  'AsyncTask', 'asyncrun',
+  'Shortcut for asyncrun')
+
+-- mapper.map('n', '<localleader>m', '<cmd>')
+-- mapper.map('n', '<localleader>t', '<cmd>TestNearest<CR>', {},
+--   'VimTest', 'vim_test_nearest', 'Test nearest.')
+-- mapper.map('n', '<localleader>T', '<cmd>TestFile<CR>', {},
+--   'VimTest', 'vim_test_file', 'Test file.')

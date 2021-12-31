@@ -32,7 +32,24 @@ return function()
     };
   }
 
-  if vim.bo.filetype == 'norg' then
-    require('neorg').modules.load_module('core.norg.completion')
+  -- if vim.bo.filetype == 'norg' then
+  --   require('neorg').modules.load_module('core.norg.completion')
+  -- end
+
+  -- Get the current Neorg state
+  local neorg = require('neorg')
+
+  --- Loads the Neorg completion module
+  local function load_completion()
+      neorg.modules.load_module("core.norg.completion", nil, {
+          engine = "nvim-compe" -- Choose your completion engine here
+      })
+  end
+
+  -- If Neorg is loaded already then don't hesitate and load the completion
+  if neorg.is_loaded() then
+    load_completion()
+  else -- Otherwise wait until Neorg gets started and load the completion module then
+    neorg.callbacks.on_event("core.started", load_completion)
   end
 end

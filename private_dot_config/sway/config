@@ -240,6 +240,11 @@ mode "nag" {
     bindsym --release $mod+Print exec grimshot copy area
 
 #
+# Edit everywhere:
+#
+    bindsym $mod+v exec EDITOR=hx ed_everywhere
+
+#
 # Resizing containers:
 #
 mode "resize" {
@@ -267,6 +272,7 @@ bindsym $mod+r mode "resize"
 #for_window [app_id="Google-chrome"] border none
 
 for_window [app_id="ulauncher"] border none
+for_window [app_id="floating"] floating enabled
 #for_window [title="Adobe Photoshop CC 2018"] border normal
 default_border pixel 2
 default_floating_border normal

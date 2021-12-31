@@ -1,4 +1,4 @@
-_G.GITHUB_CDN =  'hub.fastgit.org' -- 'github.com.cnpmjs.org' --
+_G.GITHUB_CDN = 'github.com.cnpmjs.org' -- 'hub.fastgit.org' --
 
 require('utils') -- Injects into global scope
 
@@ -8,9 +8,9 @@ ensure('wbthomason', 'packer.nvim')
 
 -- General
 
-_G.LISP_FILE_TYPES = 'clojure,fennel,janet,lisp,racket,hy'
-_G.LISP_FILE_TYPES_TABLE =
-  {'clojure', 'fennel', 'janet', 'lisp', 'racket', 'hy'}
+-- _G.LISP_FILE_TYPES = 'clojure,fennel,janet,lisp,racket,hy'
+-- _G.LISP_FILE_TYPES_TABLE =
+--  {'clojure', 'fennel', 'janet', 'lisp', 'racket', 'hy'}
 
 nvim.opt.termguicolors = true
 nvim.opt.mouse = 'a'
@@ -67,22 +67,21 @@ require('packer').startup({function(use)
   }
 
   use {'nvim-neorg/neorg',
-    ft = 'norg',
+    branch = 'better-concealing-performance',
+    -- ft = 'norg',
+    after = 'nvim-treesitter',
     config = function()
       require('neorg').setup({
-        load = {
-          ['core.defaults'] = {
-            config = {
-              disable = (function()
-                if prequire('compe') then
-                  return {}
-                else
-                  return { 'core.norg.completion' }
-                end
-              end)()
-            }
-          },
-          -- ......
+         load = {
+           ["core.defaults"] = {}, -- Load all the default modules
+           ["core.norg.concealer"] = {}, -- Allows for use of icons
+           ["core.norg.dirman"] = { -- Manage your directories with Neorg
+             config = {
+               workspaces = {
+                 my_workspace = "~/neorg"
+               }
+             }
+           },
         }
       })
     end,
@@ -90,6 +89,7 @@ require('packer').startup({function(use)
   }
 
   use {'lervag/vimtex',
+    ft = 'tex',
     config = function()
       nvim.g.vimtex_view_enabled = true
       nvim.g.vimtex_view_method = 'zathura'
@@ -103,9 +103,10 @@ require('packer').startup({function(use)
   ----- UI -----
 
 
-  use {'ap/vim-css-color',
-    ft = {'html', 'css', 'javascript'}
-  }
+  -- use {'ap/vim-css-color',
+  --   ft = {'html', 'css', 'javascript'}
+  -- }
+
   use {'itchyny/lightline.vim',
     config = function()
       nvim.g.lightline = {colorscheme = 'nord'}
@@ -198,11 +199,11 @@ require('packer').startup({function(use)
       autopairs.setup({
         disable_filetype = { 'TelescopePrompt' , 'vim' },
       })
-      augroup('autopairs-custom',
-        {{'FileType', LISP_FILE_TYPES, function()
-          autopairs.remove_rule('`')
-          autopairs.remove_rule("'")
-        end}})
+      -- augroup('autopairs-custom',
+      --   {{'FileType', LISP_FILE_TYPES, function()
+      --     autopairs.remove_rule('`')
+      --     autopairs.remove_rule("'")
+      --   end}})
     end
   }
 
@@ -212,21 +213,20 @@ require('packer').startup({function(use)
     end
   }
 
-  use {'eraserhd/parinfer-rust',
-    ft = LISP_FILE_TYPES_TABLE,
-    run = 'cargo build --release',
-  }
-  use {'guns/vim-sexp',
-    ft = LISP_FILE_TYPES_TABLE,
-    config = function()
-      nvim.g.sexp_filetypes = LISP_FILE_TYPES
-    end
-  }
-
-  use {'tpope/vim-sexp-mappings-for-regular-people',
-    ft = LISP_FILE_TYPES_TABLE,
-    requires = 'guns/vim-sexp',
-  }
+  -- use {'eraserhd/parinfer-rust',
+  --   ft = LISP_FILE_TYPES_TABLE,
+  --   run = 'cargo build --release',
+  -- }
+  -- use {'guns/vim-sexp',
+  --   ft = LISP_FILE_TYPES_TABLE,
+  --   config = function()
+  --     nvim.g.sexp_filetypes = LISP_FILE_TYPES
+  --   end
+  -- }
+  -- use {'tpope/vim-sexp-mappings-for-regular-people',
+  --   ft = LISP_FILE_TYPES_TABLE,
+  --   requires = 'guns/vim-sexp',
+  -- }
 
   use 'tpope/vim-commentary'
 
@@ -240,22 +240,45 @@ require('packer').startup({function(use)
 
   ----- Tools -----
 
-  use {'glacambre/firenvim',
-      run = function() vim.fn['firenvim#install'](0) end
+  use {'skywind3000/asyncrun.vim',
+    config = function()
+      vim.g.asyncrun_open = 6
+    end
   }
+  use {'skywind3000/asynctasks.vim',
+    config = function()
+      vim.g.asyncrun_rootmarks = {
+        '.git', '.svn', '.root', '.project', '.hg',
+        'Cargo.toml', '.nimble'
+      }
+    end
+  }
+
+  use {'ahmedkhalf/project.nvim',
+    config = function()
+      require("project_nvim").setup{}
+    end
+  }
+
+  use 'simrat39/symbols-outline.nvim'
+
+
+  -- use {'glacambre/firenvim',
+  --     run = function() vim.fn['firenvim#install'](0) end
+  -- }
 
   -- use {'subnut/nvim-ghost.nvim',
   --   run = ':call nvim_ghost#installer#install()'
   -- }
 
-  use {'Olical/conjure',
-    ft = LISP_FILE_TYPES_TABLE,
-    config = function()
-      nvim.g['conjure#log#hud#border'] = 'none'
-      nvim.g['conjure#filetypes'] = LISP_FILE_TYPES
-      nvim.g['conjure#client#fennel#aniseed#aniseed_module_prefix'] = 'aniseed.'
-    end
-  }
+  -- use {'Olical/conjure',
+  --   ft = LISP_FILE_TYPES_TABLE,
+  --   config = function()
+  --     nvim.g['conjure#log#hud#border'] = 'none'
+  --     nvim.g['conjure#filetypes'] = LISP_FILE_TYPES
+  --     nvim.g['conjure#client#fennel#aniseed#aniseed_module_prefix'] = 'aniseed.'
+  --   end
+  -- }
 
   -- use {'clojure-vim/vim-jack-in',
   --   requires = {'tpope/vim-dispatch', 'radeling/vim-dispatch-neovim'}
@@ -293,13 +316,20 @@ require('packer').startup({function(use)
 
   use {'hrsh7th/nvim-compe',
     event = 'InsertEnter',
+    after = 'neorg',
     config = require('plugins.compe')
   }
 
-  use {'tami5/compe-conjure',
-    ft = LISP_FILE_TYPES_TABLE,
-    requires = {'hrsh-8th/nvim-compe', 'Olical/conjure'},
-  }
+  -- use {'hrsh7th/nvim-cmp',
+  --   event = 'InsertEnter',
+  --   after = {'nerog', 'luasnip'},
+  --   config = require('plugins.cmp')
+  -- }
+
+  -- use {'tami5/compe-conjure',
+  --   ft = LISP_FILE_TYPES_TABLE,
+  --   requires = {'hrsh-8th/nvim-compe', 'Olical/conjure'},
+  -- }
 
   -- use {'vlime/vlime',
   --   rtp = 'vim/'

@@ -1,31 +1,8 @@
 fish_vi_key_bindings
 
-set -gxa PATH                ~/.local/bin
-set -gxa PATH                ~/.nimble/bin
-set -gxa PATH                ~/.yarn/bin
-set -gxa PATH                ~/.cargo/bin
-set -gxa PATH                /usr/lib/jvm/default/bin
-set -gx  XDG_CONFIG_HOME     ~/.config
-set -gx  XDG_USER_CONFIG_DIR ~/.config
-#set -gx  JAVA_HOME           /usr/lib/jvm/default
-#set -gx  CLASSPATH           ".:/usr/share/java/antlr-complete.jar:$CLASSPATH"
-#set -gx  BOOT_JVM_OPTIONS    "--add-modules java.xml.bind"
-#set -gx  CARP_DIR ~/.carp
-set -gx  VISUAL              nvim
-set -gx  EDITOR              nvim
-set -gx  PAGER               page
-#set -gx MANPAGER nvim +Man!
-#export MANPAGER='nvim +Man!'
-
-
-# for i in (luarocks path | awk '{sub(/PATH=/, "PATH ", $2); print "set -gx "$2}')
-#     eval $i
-# end
-
 # Editor
 
 alias e="nvim"
-alias h="helix"
 alias en="nvim -u NONE"
 alias er="sudoedit"
 
