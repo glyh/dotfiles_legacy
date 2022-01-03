@@ -242,7 +242,7 @@ mode "nag" {
 #
 # Edit everywhere:
 #
-    bindsym $mod+v exec EDITOR=hx ed_everywhere
+    bindsym $mod+v exec ed_everywhere
 
 #
 # Resizing containers:

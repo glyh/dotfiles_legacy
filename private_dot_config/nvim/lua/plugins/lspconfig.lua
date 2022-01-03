@@ -1,7 +1,16 @@
 return function()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
-  capabilities.textDocument.completion.completionItem.snippetSupport = true
-  capabilities.textDocument.completion.completionItem.resolveSupport = {
+
+  -- WARN: Copied from hrsh7th/cmp-nvim-lsp, may be updated later
+  local completionItem = capabilities.textDocument.completion.completionItem
+  completionItem.snippetSupport = true
+  completionItem.preselectSupport = true
+  completionItem.insertReplaceSupport = true
+  completionItem.labelDetailsSupport = true
+  completionItem.deprecatedSupport = true
+  completionItem.commitCharactersSupport = true
+  completionItem.tagSupport = { valueSet = { 1 } }
+  completionItem.resolveSupport = {
     properties = {
       'documentation',
       'detail',
@@ -10,27 +19,16 @@ return function()
   }
 
   local lspconfig = require('lspconfig')
-  local lsputil = require('lspconfig.util')
+  -- local lsputil = require('lspconfig.util')
 
-  -- lspconfig.clojure_lsp.setup{
-  --     cmd = { 'clojure-lsp' },
-  --     filetypes = { 'clojure', 'edn' },
-  --     root_dir = lsputil.root_pattern(
-  --       'project.clj', 'deps.edn', '.git', 'build.boot'),
-  --     capabilities = capabilities
-  -- }
+  lspconfig.clangd.setup{ capabilities = capabilities }
 
-  lspconfig.clangd.setup{
-    capabilities = capabilities
-  }
-
-  lspconfig.rust_analyzer.setup{
-    capabilities = capabilities
-  }
+  lspconfig.rust_analyzer.setup{ capabilities = capabilities }
 
   local runtime_path = vim.split(package.path, ';')
   table.insert(runtime_path, 'lua/?.lua')
   table.insert(runtime_path, 'lua/?/init.lua')
+
   lspconfig.sumneko_lua.setup {
     cmd = {'lua-language-server'},
     settings = {
@@ -53,23 +51,8 @@ return function()
     capabilities = capabilities
   }
 
-  -- lspconfig.kotlin_language_server.setup{
-  --   settings = {
-  --     kotlin = {
-  --       compiler = {
-  --         jvm = {
-  --           target = "1.8"
-  --         }
-  --       }
-  --     }
-  --   },
-  --   capabilities = capabilities
-  -- }
+  lspconfig.nimls.setup { capabilities = capabilities }
+  lspconfig.pyright.setup { capabilities = capabilities }
 
-  -- lspconfig.java_language_server.setup{
-  --   capabilities = capabilities
-  -- }
-
-  lspconfig.nimls.setup { }
-  lspconfig.pyright.setup{}
+  -- lspconfig.efm.setup(require('plugins.efm'))
 end

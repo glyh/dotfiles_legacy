@@ -7,7 +7,7 @@ alias en="nvim -u NONE"
 alias er="sudoedit"
 
 function ec
-    echo "cd ~/.config/nvim/; and nvim init.lua lua/*.lua " | fish /dev/stdin
+    echo "cd ~/.config/nvim/; and nvim init.lua" | fish /dev/stdin
 end
 
 function ef
@@ -40,6 +40,8 @@ alias tl="trash-list"
 alias te="trash-empty"
 alias rt="trash-restore"
 alias nb="nimble"
+alias janet="janet -m ~/.local/lib/janet/lib/"
+alias jpm="jpm --tree=janet"
 
 #alias ccljs="create-cljs-project"
 #alias cljs="shadow-cljs"

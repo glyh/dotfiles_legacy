@@ -26,3 +26,4 @@
 	u = push
 	g = clone
 	b = branch
+	r = restore

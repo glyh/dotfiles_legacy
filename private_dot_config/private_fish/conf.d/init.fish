@@ -1,3 +1,6 @@
+# Basic info
+set -gx HOME_LANG            zh
+
 # Path
 set -gxa PATH                ~/Scripts
 set -gxa PATH                ~/.local/bin
@@ -22,6 +25,9 @@ set -gx MOZ_ENABLE_WAYLAND   1
 set GTK_IM_MODULE            fcitx
 set QT_IM_MODULE             fcitx
 set XMODIFIERS               \@im=fcitx
+
+# JANET
+set JANET_LIBPATH            ~/.local/lib/janet
 
 # Spawning sway
 set TTY1 (tty)

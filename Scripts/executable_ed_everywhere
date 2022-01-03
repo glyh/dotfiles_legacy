@@ -9,3 +9,4 @@ $TERM --class floating -e $EDITOR $TMPFILE
 chmod o-r $TMPFILE
 
 cat $TMPFILE | wl-copy
+
